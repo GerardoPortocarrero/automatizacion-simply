@@ -1,0 +1,6 @@
+API: https://documentation.simpliroute.com/?shell#authentication
+API KEY (token): d2b82e15b3671a6038ccbf76e582c3f755355684
+
+PROJECT SETUP:
+>_ npm create vite@latest simpliroute-dashboard -- --template react
+>_ 
