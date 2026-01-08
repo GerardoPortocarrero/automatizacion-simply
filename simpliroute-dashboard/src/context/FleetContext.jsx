@@ -24,14 +24,12 @@ export function FleetProvider({ children }) {
         ]);
 
         if (driversResponse.status === 'fulfilled') {
-          console.log("Respuesta de la API de Conductores:", driversResponse.value.data);
           setDrivers(driversResponse.value.data.results || driversResponse.value.data || []);
         } else {
           console.error("Error al obtener conductores:", driversResponse.reason);
         }
 
         if (vehiclesResponse.status === 'fulfilled') {
-          console.log("Respuesta de la API de Vehículos:", vehiclesResponse.value.data);
           setVehicles(vehiclesResponse.value.data.results || vehiclesResponse.value.data || []);
         } else {
           console.error("Error al obtener vehículos:", vehiclesResponse.reason);
@@ -52,13 +50,11 @@ export function FleetProvider({ children }) {
   // useMemo will prevent these maps from being recalculated on every render.
   const driverMap = useMemo(() => {
     const map = new Map(drivers.map(driver => [driver.id, driver.name]));
-    console.log("Mapa de Conductores creado:", map);
     return map;
   }, [drivers]);
 
   const vehicleMap = useMemo(() => {
     const map = new Map(vehicles.map(vehicle => [vehicle.id, vehicle.name]));
-    console.log("Mapa de Vehículos creado:", map);
     return map;
   }, [vehicles]);
 

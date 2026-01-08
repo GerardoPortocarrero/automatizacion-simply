@@ -2,15 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { Box, Typography, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import api from '../services/api';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LabelList } from 'recharts';
-import DetailsModal from '../components/DetailsModal'; // Import DetailsModal
+import DetailsModal from '../components/DetailsModal';
+import { useTheme } from '@mui/material/styles'; // Import useTheme
 
 function DailyRouteReport() {
   const [loading, setLoading] = useState(true);
   const [routes, setRoutes] = useState([]);
   const [error, setError] = useState(null);
-  const [openModal, setOpenModal] = useState(false); // State for modal
-  const [selectedRecord, setSelectedRecord] = useState(null); // State for selected record
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedRecord, setSelectedRecord] = useState(null);
 
+  const theme = useTheme(); // Use theme here
 
   useEffect(() => {
     const fetchDailyRoutes = async () => {
@@ -139,11 +141,12 @@ function DailyRouteReport() {
                 textAnchor="end" 
                 interval={0}
                 style={{ fontSize: '0.9rem' }}
+                axisLine={{ stroke: theme.palette.text.primary }} tick={{ fill: theme.palette.text.primary }}
             />
-            <YAxis yAxisId="left" orientation="left" stroke="#F40009" />
-            <YAxis yAxisId="right" orientation="right" stroke="#007bff" />
+            <YAxis yAxisId="left" orientation="left" stroke="#F40009" axisLine={{ stroke: theme.palette.text.primary }} tick={{ fill: theme.palette.text.primary }} />
+            <YAxis yAxisId="right" orientation="right" stroke="#007bff" axisLine={{ stroke: theme.palette.text.primary }} tick={{ fill: theme.palette.text.primary }} />
             <Tooltip />
-            <Legend verticalAlign="top" />
+            <Legend verticalAlign="top" align="center" wrapperStyle={{ paddingBottom: '10px' }} />
             <Bar yAxisId="left" dataKey="Visitas" fill="#F40009">
                 <LabelList dataKey="Visitas" position="top" style={{ fill: '#F40009' }} formatter={(value) => value === 0 ? '' : value} />
             </Bar>
@@ -156,7 +159,7 @@ function DailyRouteReport() {
 
       {/* Table Section */}
       <TableContainer component={Paper} elevation={3} sx={{ backgroundColor: 'transparent', backgroundImage: 'none' }}>
-        <Table sx={{ minMinh: 650 }}>
+        <Table sx={{ minWidth: 650 }}>
           <TableHead>
             <TableRow>
               <TableCell>N°</TableCell>

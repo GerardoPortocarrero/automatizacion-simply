@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 import { Box, Typography, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
-import { useFleet } from '../context/FleetContext'; // Use the shared context
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LabelList } from 'recharts'; // Import LabelList
+import { useFleet } from '../context/FleetContext';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LabelList } from 'recharts';
 import { useTheme } from '@mui/material/styles';
-import DetailsModal from '../components/DetailsModal'; // Import DetailsModal
+import DetailsModal from '../components/DetailsModal';
 
 function VehiclePerformanceReport() {
-  // Get vehicle data and loading state from the FleetContext
   const { vehicles, loading: fleetLoading } = useFleet();
   const theme = useTheme();
 
-  const [openModal, setOpenModal] = useState(false); // State for modal
-  const [selectedRecord, setSelectedRecord] = useState(null); // State for selected record
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedRecord, setSelectedRecord] = useState(null);
 
   const handleRowClick = (record) => {
     setSelectedRecord(record);
@@ -20,10 +19,9 @@ function VehiclePerformanceReport() {
 
   const handleCloseModal = () => {
     setOpenModal(false);
-    setSelectedRecord(null); // Clear selected record on close
+    setSelectedRecord(null);
   };
 
-  // Centered, text-less loading spinner
   if (fleetLoading) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" sx={{ width: '100%', height: '100%' }}>
@@ -40,7 +38,6 @@ function VehiclePerformanceReport() {
     );
   }
 
-  // Prepare data for the chart using data from the context
   const chartData = vehicles.map((vehicle) => ({
     name: vehicle.name,
     "Capacidad 1": vehicle.capacity,
@@ -63,10 +60,11 @@ function VehiclePerformanceReport() {
                 textAnchor="end" 
                 interval={0}
                 style={{ fontSize: '0.9rem' }}
+                axisLine={{ stroke: theme.palette.text.primary }} tick={{ fill: theme.palette.text.primary }}
             />
-            <YAxis />
+            <YAxis axisLine={{ stroke: theme.palette.text.primary }} tick={{ fill: theme.palette.text.primary }} />
             <Tooltip />
-            <Legend verticalAlign="top" />
+            <Legend verticalAlign="top" align="center" wrapperStyle={{ paddingBottom: '10px' }} />
             <Bar dataKey="Capacidad 1" fill={theme.palette.primary.main}>
                 <LabelList dataKey="Capacidad 1" position="top" style={{ fill: theme.palette.primary.main }} formatter={(value) => value === 0 ? '' : value} />
             </Bar>

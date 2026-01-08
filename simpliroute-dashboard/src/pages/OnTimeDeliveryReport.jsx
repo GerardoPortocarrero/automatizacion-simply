@@ -29,7 +29,8 @@ import {
 } from "recharts";
 import api from "../services/api";
 import { useFleet } from "../context/FleetContext";
-import DetailsModal from '../components/DetailsModal'; // Import DetailsModal
+import DetailsModal from '../components/DetailsModal';
+import { useTheme } from '@mui/material/styles'; // Import useTheme
 
 // Define colors for the statuses
 const STATUS_COLORS = {
@@ -42,8 +43,10 @@ function OnTimeDeliveryReport() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [visits, setVisits] = useState([]);
-  const [openModal, setOpenModal] = useState(false); // State for modal
-  const [selectedRecord, setSelectedRecord] = useState(null); // State for selected record
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedRecord, setSelectedRecord] = useState(null);
+
+  const theme = useTheme(); // Use theme here
 
   // Get driver and vehicle maps from the global context
   const { driverMap, vehicleMap, loading: fleetLoading } = useFleet();
@@ -65,7 +68,6 @@ function OnTimeDeliveryReport() {
     fetchVisitsData();
   }, []);
 
-  // useMemo will re-calculate the report data only when visits, driverMap, or vehicleMap change.
   const reportData = useMemo(() => {
     if (fleetLoading) {
       return null;
@@ -194,7 +196,7 @@ function OnTimeDeliveryReport() {
         <Paper elevation={3} sx={{ p: 2, flex: 1, backgroundColor: 'transparent', backgroundImage: 'none' }}>
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
-              <Legend verticalAlign="top" align="center" />
+              <Legend verticalAlign="top" align="center" wrapperStyle={{ paddingBottom: '10px' }} />
               <Pie 
                 data={pieChartData} 
                 dataKey="value" 
@@ -215,10 +217,10 @@ function OnTimeDeliveryReport() {
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={reportData.driverPerformance} layout="vertical" margin={{ right: 30, left: 50 }}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis type="number" unit=" visitas" />
-              <YAxis type="category" dataKey="driver" width={180} interval={0} />
+              <XAxis type="number" unit=" visitas" axisLine={{ stroke: theme.palette.text.primary }} tick={{ fill: theme.palette.text.primary }} />
+              <YAxis type="category" dataKey="driver" width={180} interval={0} axisLine={{ stroke: theme.palette.text.primary }} tick={{ fill: theme.palette.text.primary }} />
               <Tooltip />
-              <Legend verticalAlign="top" align="center" />
+              <Legend verticalAlign="top" align="center" wrapperStyle={{ paddingBottom: '10px' }} />
               <Bar dataKey="Satisfactorio" stackId="a" fill={STATUS_COLORS['Satisfactorio']}>
                 <LabelList dataKey="Satisfactorio" position="center" style={{ fill: 'white' }} formatter={(value) => value === 0 ? '' : value} />
               </Bar>
