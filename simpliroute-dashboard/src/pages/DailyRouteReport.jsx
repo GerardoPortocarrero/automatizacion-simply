@@ -92,13 +92,12 @@ function DailyRouteReport() {
   }
 
   if (error) {
-    return <Typography color="error">{error}</Typography>;
+    return <Alert severity="error">{error}</Alert>;
   }
   
   if (routes.length === 0) {
     return (
         <Box sx={{ p: 3 }}>
-            <Typography variant="h4" gutterBottom>Reporte de Ruta Diaria</Typography>
             <Typography>No se encontraron rutas para la fecha de hoy.</Typography>
       </Box>
     );
@@ -112,6 +111,7 @@ function DailyRouteReport() {
 
   return (
     <Box sx={{ p: 3 }}>
+      {/* Chart Section */}
       <Paper elevation={3} sx={{ p: 2, mb: 4 }}>
         <ResponsiveContainer width="100%" height={400}>
           <BarChart
@@ -126,24 +126,26 @@ function DailyRouteReport() {
                 interval={0}
                 style={{ fontSize: '0.9rem' }}
             />
-            <YAxis yAxisId="left" orientation="left" stroke="#F40009" /> {/* Removed label */}
-            <YAxis yAxisId="right" orientation="right" stroke="#007bff" /> {/* Removed label */}
+            <YAxis yAxisId="left" orientation="left" stroke="#F40009" />
+            <YAxis yAxisId="right" orientation="right" stroke="#007bff" />
             <Tooltip />
             <Legend verticalAlign="top" />
             <Bar yAxisId="left" dataKey="Visitas" fill="#F40009">
-                <LabelList dataKey="Visitas" position="top" style={{ fill: '#F40009' }} />
+                <LabelList dataKey="Visitas" position="top" style={{ fill: '#F40009' }} formatter={(value) => value === 0 ? '' : value} />
             </Bar>
             <Bar yAxisId="right" dataKey="Distancia (km)" fill="#007bff">
-                <LabelList dataKey="Distancia (km)" position="top" style={{ fill: '#007bff' }} />
+                <LabelList dataKey="Distancia (km)" position="top" style={{ fill: '#007bff' }} formatter={(value) => value === 0 ? '' : value} />
             </Bar>
           </BarChart>
         </ResponsiveContainer>
       </Paper>
 
+      {/* Table Section */}
       <TableContainer component={Paper} elevation={3}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
+              <TableCell>N°</TableCell>
               <TableCell>Vehículo</TableCell>
               <TableCell align="right">Conductor</TableCell>
               <TableCell align="right">Estado</TableCell>
@@ -154,7 +156,7 @@ function DailyRouteReport() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {routes.map((route) => (
+            {routes.map((route, index) => (
               <TableRow
                 key={route.id}
                 sx={{ 
@@ -164,7 +166,10 @@ function DailyRouteReport() {
                     }
                 }}
               >
-                <TableCell component="th" scope="row">{route.vehicle_plate || 'N/A'}</TableCell>
+                <TableCell>{index + 1}</TableCell>
+                <TableCell component="th" scope="row">
+                  {route.vehicle_plate || 'N/A'}
+                </TableCell>
                 <TableCell align="right">{route.driver_name || 'N/A'}</TableCell>
                 <TableCell align="right">{route.status || 'N/A'}</TableCell>
                 <TableCell align="right">{route.total_visits || 0}</TableCell>

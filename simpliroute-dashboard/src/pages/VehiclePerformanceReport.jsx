@@ -21,7 +21,6 @@ function VehiclePerformanceReport() {
   if (vehicles.length === 0) {
     return (
         <Box sx={{ p: 3 }}>
-            <Typography variant="h4" gutterBottom>Reporte de Rendimiento de Vehículos</Typography>
             <Typography>No se encontraron vehículos.</Typography>
       </Box>
     );
@@ -38,16 +37,10 @@ function VehiclePerformanceReport() {
     <Box sx={{ p: 3 }}>
       {/* Chart Section */}
       <Paper elevation={3} sx={{ p: 2, mb: 4 }}>
-        <Typography variant="h6" gutterBottom align="center">Capacidad por Vehículo</Typography>
         <ResponsiveContainer width="100%" height={400}>
           <BarChart
             data={chartData}
-            margin={{
-              top: 20,
-              right: 30,
-              left: 20,
-              bottom: 75,
-            }}
+            margin={{ top: 20, right: 30, left: 20, bottom: 75 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis 
@@ -61,10 +54,10 @@ function VehiclePerformanceReport() {
             <Tooltip />
             <Legend verticalAlign="top" />
             <Bar dataKey="Capacidad 1" fill={theme.palette.primary.main}>
-                <LabelList dataKey="Capacidad 1" position="top" style={{ fill: theme.palette.primary.main }} />
+                <LabelList dataKey="Capacidad 1" position="top" style={{ fill: theme.palette.primary.main }} formatter={(value) => value === 0 ? '' : value} />
             </Bar>
             <Bar dataKey="Capacidad 2" fill="#007bff">
-                <LabelList dataKey="Capacidad 2" position="top" style={{ fill: '#007bff' }} />
+                <LabelList dataKey="Capacidad 2" position="top" style={{ fill: '#007bff' }} formatter={(value) => value === 0 ? '' : value} />
             </Bar>
           </BarChart>
         </ResponsiveContainer>
@@ -75,6 +68,7 @@ function VehiclePerformanceReport() {
         <Table sx={{ minWidth: 650 }} aria-label="vehicle performance table">
           <TableHead>
             <TableRow>
+              <TableCell>N°</TableCell>
               <TableCell>ID</TableCell>
               <TableCell>Placa</TableCell>
               <TableCell align="right">Tipo de Carga</TableCell>
@@ -83,7 +77,7 @@ function VehiclePerformanceReport() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {vehicles.map((vehicle) => (
+            {vehicles.map((vehicle, index) => (
               <TableRow
                 key={vehicle.id}
                 sx={{
@@ -93,6 +87,7 @@ function VehiclePerformanceReport() {
                     }
                 }}
               >
+                <TableCell>{index + 1}</TableCell>
                 <TableCell component="th" scope="row">{vehicle.id}</TableCell>
                 <TableCell>{vehicle.name || 'N/A'}</TableCell>
                 <TableCell align="right">{vehicle.type_load || 'N/A'}</TableCell>

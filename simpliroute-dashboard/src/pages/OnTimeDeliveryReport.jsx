@@ -180,7 +180,6 @@ function OnTimeDeliveryReport() {
       {/* Charts Section */}
       <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} gap={4} mb={4}>
         <Paper elevation={3} sx={{ p: 2, flex: 1 }}>
-          <Typography variant="h6" gutterBottom align="center">Distribución de Entregas</Typography>
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
               <Legend verticalAlign="top" align="center" />
@@ -192,7 +191,7 @@ function OnTimeDeliveryReport() {
                 cy="50%" 
                 outerRadius={80} 
                 labelLine={false}
-                label={({ name, value }) => `${value}`} // Show absolute value
+                label={({ value }) => value === 0 ? '' : value} // Show absolute value, hide if 0
               >
                 {pieChartData.map((entry) => <Cell key={entry.name} fill={STATUS_COLORS[entry.name]} />)}
               </Pie>
@@ -201,7 +200,6 @@ function OnTimeDeliveryReport() {
           </ResponsiveContainer>
         </Paper>
         <Paper elevation={3} sx={{ p: 2, flex: 2 }}>
-          <Typography variant="h6" gutterBottom align="center">Rendimiento por Conductor</Typography>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={reportData.driverPerformance} layout="vertical" margin={{ right: 30, left: 50 }}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -210,13 +208,13 @@ function OnTimeDeliveryReport() {
               <Tooltip />
               <Legend verticalAlign="top" align="center" />
               <Bar dataKey="Satisfactorio" stackId="a" fill={STATUS_COLORS['Satisfactorio']}>
-                <LabelList dataKey="Satisfactorio" position="center" style={{ fill: 'white' }} />
+                <LabelList dataKey="Satisfactorio" position="center" style={{ fill: 'white' }} formatter={(value) => value === 0 ? '' : value} />
               </Bar>
               <Bar dataKey="Pendiente" stackId="a" fill={STATUS_COLORS['Pendiente']}>
-                <LabelList dataKey="Pendiente" position="center" style={{ fill: 'black' }} />
+                <LabelList dataKey="Pendiente" position="center" style={{ fill: 'black' }} formatter={(value) => value === 0 ? '' : value} />
               </Bar>
               <Bar dataKey="Fallida" stackId="a" fill={STATUS_COLORS['Fallida']}>
-                <LabelList dataKey="Fallida" position="center" style={{ fill: 'white' }} />
+                <LabelList dataKey="Fallida" position="center" style={{ fill: 'white' }} formatter={(value) => value === 0 ? '' : value} />
               </Bar>
             </BarChart>
           </ResponsiveContainer>
@@ -228,6 +226,7 @@ function OnTimeDeliveryReport() {
         <Table sx={{ minWidth: 650 }}>
           <TableHead>
             <TableRow>
+              <TableCell>N°</TableCell>
               <TableCell>Cliente</TableCell>
               <TableCell>Dirección</TableCell>
               <TableCell>Conductor</TableCell>
@@ -239,15 +238,16 @@ function OnTimeDeliveryReport() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {reportData.details.map((detail) => (
+            {reportData.details.map((detail, index) => (
               <TableRow key={detail.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                <TableCell>{index + 1}</TableCell>
                 <TableCell>{detail.title}</TableCell>
                 <TableCell>{detail.address}</TableCell>
                 <TableCell>{detail.driverName}</TableCell>
                 <TableCell>{detail.vehiclePlate}</TableCell>
                 <TableCell align="right">{detail.load}</TableCell>
                 <TableCell>
-                  {detail.googleMapsUrl ? <Link href={detail.googleMapsUrl} target="_blank">Abrir</Link> : 'N/A'}
+                  {detail.googleMapsUrl ? <Link href={detail.googleMapsUrl} target="_blank">Ver Mapa</Link> : 'N/A'}
                 </TableCell>
                 <TableCell align="right"><span style={{ color: STATUS_COLORS[detail.status], fontWeight: 'bold' }}>{detail.status}</span></TableCell>
                 <TableCell>{detail.checkout_time}</TableCell>
