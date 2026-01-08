@@ -36,8 +36,6 @@ function VehiclePerformanceReport() {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>Reporte de Rendimiento de Vehículos</Typography>
-      
       {/* Chart Section */}
       <Paper elevation={3} sx={{ p: 2, mb: 4 }}>
         <Typography variant="h6" gutterBottom align="center">Capacidad por Vehículo</Typography>
@@ -59,7 +57,7 @@ function VehiclePerformanceReport() {
                 interval={0}
                 style={{ fontSize: '0.9rem' }}
             />
-            <YAxis label={{ value: 'Unidades de Capacidad', angle: -90, position: 'insideLeft' }} />
+            <YAxis /> {/* Removed redundant label */}
             <Tooltip />
             <Legend verticalAlign="top" />
             <Bar dataKey="Capacidad 1" fill={theme.palette.primary.main}>

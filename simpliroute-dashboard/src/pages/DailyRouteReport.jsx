@@ -112,7 +112,6 @@ function DailyRouteReport() {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>Reporte de Ruta Diaria</Typography>
       <Paper elevation={3} sx={{ p: 2, mb: 4 }}>
         <ResponsiveContainer width="100%" height={400}>
           <BarChart
@@ -127,8 +126,8 @@ function DailyRouteReport() {
                 interval={0}
                 style={{ fontSize: '0.9rem' }}
             />
-            <YAxis yAxisId="left" orientation="left" stroke="#F40009" label={{ value: 'Visitas', angle: -90, position: 'insideLeft' }} />
-            <YAxis yAxisId="right" orientation="right" stroke="#007bff" label={{ value: 'Distancia (km)', angle: 90, position: 'insideRight' }} />
+            <YAxis yAxisId="left" orientation="left" stroke="#F40009" /> {/* Removed label */}
+            <YAxis yAxisId="right" orientation="right" stroke="#007bff" /> {/* Removed label */}
             <Tooltip />
             <Legend verticalAlign="top" />
             <Bar yAxisId="left" dataKey="Visitas" fill="#F40009">
