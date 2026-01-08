@@ -222,7 +222,7 @@ function OnTimeDeliveryReport() {
       </Box>
 
       {/* Table Section */}
-      <TableContainer component={Paper} elevation={3}>
+      <TableContainer component={Paper} elevation={3} sx={{ backgroundColor: 'transparent', backgroundImage: 'none' }}>
         <Table sx={{ minWidth: 650 }}>
           <TableHead>
             <TableRow>

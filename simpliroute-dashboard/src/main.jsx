@@ -84,6 +84,7 @@ const theme = createTheme({
         root: {
           borderRadius: 0,
           boxShadow: 'none',
+          border: `1px solid #333333`, // Add a subtle border for definition
         },
       },
     },
