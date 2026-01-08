@@ -112,7 +112,7 @@ function DailyRouteReport() {
   return (
     <Box sx={{ p: 2 }}>
       {/* Chart Section */}
-      <Paper elevation={3} sx={{ mb: 2 }}>
+      <Paper elevation={3} sx={{ mb: 2, backgroundColor: 'transparent', backgroundImage: 'none' }}>
         <ResponsiveContainer width="100%" height={400}>
           <BarChart
             data={chartData}

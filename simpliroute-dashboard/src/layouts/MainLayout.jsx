@@ -91,9 +91,7 @@ function MainLayout() {
             borderBottom: `2px solid ${theme.palette.divider}`, // Separation with border
           }}
         >
-            <Box sx={{ flexGrow: 1, textAlign: 'center' }}>
-                <img src={logo} alt="Logo Empresa" style={{ height: '40px' }} />
-            </Box>
+            <img src={logo} alt="Logo Empresa" style={{ height: '40px' }} />
             <IconButton sx={{ position: 'absolute', right: 16 }}>
                 <FaSun />
             </IconButton>
