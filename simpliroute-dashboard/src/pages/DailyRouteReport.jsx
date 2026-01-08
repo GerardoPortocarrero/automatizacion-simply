@@ -2,11 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Box, Typography, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import api from '../services/api';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LabelList } from 'recharts';
+import DetailsModal from '../components/DetailsModal'; // Import DetailsModal
 
 function DailyRouteReport() {
   const [loading, setLoading] = useState(true);
   const [routes, setRoutes] = useState([]);
   const [error, setError] = useState(null);
+  const [openModal, setOpenModal] = useState(false); // State for modal
+  const [selectedRecord, setSelectedRecord] = useState(null); // State for selected record
+
 
   useEffect(() => {
     const fetchDailyRoutes = async () => {
@@ -83,6 +87,16 @@ function DailyRouteReport() {
     fetchDailyRoutes();
   }, []);
 
+  const handleRowClick = (record) => {
+    setSelectedRecord(record);
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setSelectedRecord(null); // Clear selected record on close
+  };
+
   if (loading) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" sx={{ width: '100%', height: '100%' }}>
@@ -142,7 +156,7 @@ function DailyRouteReport() {
 
       {/* Table Section */}
       <TableContainer component={Paper} elevation={3} sx={{ backgroundColor: 'transparent', backgroundImage: 'none' }}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table sx={{ minMinh: 650 }}>
           <TableHead>
             <TableRow>
               <TableCell>N°</TableCell>
@@ -161,10 +175,12 @@ function DailyRouteReport() {
                 key={route.id}
                 sx={{ 
                     '&:last-child td, &:last-child th': { border: 0 },
+                    cursor: 'pointer',
                     '&:hover': {
                         backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#1a1a1a' : '#e9ecef',
                     }
                 }}
+                onClick={() => handleRowClick(route)}
               >
                 <TableCell>{index + 1}</TableCell>
                 <TableCell component="th" scope="row">
@@ -181,6 +197,8 @@ function DailyRouteReport() {
           </TableBody>
         </Table>
       </TableContainer>
+
+      <DetailsModal open={openModal} onClose={handleCloseModal} data={selectedRecord} />
     </Box>
   );
 }

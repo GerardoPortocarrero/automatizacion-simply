@@ -1,13 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Typography, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import { useFleet } from '../context/FleetContext'; // Use the shared context
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LabelList } from 'recharts'; // Import LabelList
 import { useTheme } from '@mui/material/styles';
+import DetailsModal from '../components/DetailsModal'; // Import DetailsModal
 
 function VehiclePerformanceReport() {
   // Get vehicle data and loading state from the FleetContext
   const { vehicles, loading: fleetLoading } = useFleet();
   const theme = useTheme();
+
+  const [openModal, setOpenModal] = useState(false); // State for modal
+  const [selectedRecord, setSelectedRecord] = useState(null); // State for selected record
+
+  const handleRowClick = (record) => {
+    setSelectedRecord(record);
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setSelectedRecord(null); // Clear selected record on close
+  };
 
   // Centered, text-less loading spinner
   if (fleetLoading) {
@@ -50,7 +64,7 @@ function VehiclePerformanceReport() {
                 interval={0}
                 style={{ fontSize: '0.9rem' }}
             />
-            <YAxis /> {/* Removed redundant label */}
+            <YAxis />
             <Tooltip />
             <Legend verticalAlign="top" />
             <Bar dataKey="Capacidad 1" fill={theme.palette.primary.main}>
@@ -82,10 +96,12 @@ function VehiclePerformanceReport() {
                 key={vehicle.id}
                 sx={{
                     '&:last-child td, &:last-child th': { border: 0 },
+                    cursor: 'pointer',
                     '&:hover': {
-                        backgroundColor: theme.palette.mode === 'dark' ? '#1a1a1a' : '#e9ecef',
+                        backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#1a1a1a' : '#e9ecef',
                     }
                 }}
+                onClick={() => handleRowClick(vehicle)}
               >
                 <TableCell>{index + 1}</TableCell>
                 <TableCell component="th" scope="row">{vehicle.id}</TableCell>
@@ -98,6 +114,8 @@ function VehiclePerformanceReport() {
           </TableBody>
         </Table>
       </TableContainer>
+
+      <DetailsModal open={openModal} onClose={handleCloseModal} data={selectedRecord} />
     </Box>
   );
 }

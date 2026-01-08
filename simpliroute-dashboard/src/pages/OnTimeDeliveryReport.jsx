@@ -25,14 +25,15 @@ import {
   Cell,
   Tooltip,
   Legend,
-  LabelList, // Import LabelList
+  LabelList,
 } from "recharts";
 import api from "../services/api";
 import { useFleet } from "../context/FleetContext";
+import DetailsModal from '../components/DetailsModal'; // Import DetailsModal
 
 // Define colors for the statuses
 const STATUS_COLORS = {
-  'Satisfactorio': '#00C49F', // Green for satisfactory
+  'Satisfactorio': '#00C49F',
   'Pendiente': '#FFBB28',
   'Fallida': '#FF0000',
 };
@@ -41,6 +42,8 @@ function OnTimeDeliveryReport() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [visits, setVisits] = useState([]);
+  const [openModal, setOpenModal] = useState(false); // State for modal
+  const [selectedRecord, setSelectedRecord] = useState(null); // State for selected record
 
   // Get driver and vehicle maps from the global context
   const { driverMap, vehicleMap, loading: fleetLoading } = useFleet();
@@ -93,11 +96,11 @@ function OnTimeDeliveryReport() {
         const nameOnly = (nameParts.length > 1 ? nameParts.slice(1).join('-') : nameParts[0]).trim();
         const words = nameOnly.split(' ').filter(Boolean);
 
-        if (words.length >= 3) { // e.g., YUCRA SOTO ROBIN
+        if (words.length >= 3) {
           const lastName = words[0];
           const firstName = words[2];
           chartDriverName = `${firstName} ${lastName}`;
-        } else if (words.length === 2) { // e.g., JOHN DOE
+        } else if (words.length === 2) {
             chartDriverName = `${words[0]} ${words[1]}`;
         }
          else {
@@ -144,7 +147,16 @@ function OnTimeDeliveryReport() {
     };
   }, [visits, driverMap, vehicleMap, fleetLoading]);
 
-  // Centered, text-less loading spinner
+  const handleRowClick = (record) => {
+    setSelectedRecord(record);
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setSelectedRecord(null); // Clear selected record on close
+  };
+
   if (loading || fleetLoading) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" sx={{ width: '100%', height: '100%' }}>
@@ -168,7 +180,7 @@ function OnTimeDeliveryReport() {
   ];
 
   return (
-    <Box sx={{ p: 2 }}>
+    <Box sx={{ p: 3 }}>
       {/* Summary Statistics */}
       <Paper elevation={3} sx={{ mb: 2, display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', backgroundColor: 'transparent', backgroundImage: 'none' }}>
         <Box textAlign="center" m={1}><Typography variant="h6">Total</Typography><Typography variant="h5">{reportData.totalVisits}</Typography></Box>
@@ -191,7 +203,7 @@ function OnTimeDeliveryReport() {
                 cy="50%" 
                 outerRadius={80} 
                 labelLine={false}
-                label={({ value }) => value === 0 ? '' : value} // Show absolute value, hide if 0
+                label={({ value }) => value === 0 ? '' : value}
               >
                 {pieChartData.map((entry) => <Cell key={entry.name} fill={STATUS_COLORS[entry.name]} />)}
               </Pie>
@@ -239,7 +251,7 @@ function OnTimeDeliveryReport() {
           </TableHead>
           <TableBody>
             {reportData.details.map((detail, index) => (
-              <TableRow key={detail.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+              <TableRow key={detail.id} sx={{ '&:last-child td, &:last-child th': { border: 0 }, cursor: 'pointer' }} onClick={() => handleRowClick(detail)}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{detail.title}</TableCell>
                 <TableCell>{detail.address}</TableCell>
@@ -256,6 +268,8 @@ function OnTimeDeliveryReport() {
           </TableBody>
         </Table>
       </TableContainer>
+
+      <DetailsModal open={openModal} onClose={handleCloseModal} data={selectedRecord} />
     </Box>
   );
 }

@@ -133,6 +133,13 @@ const theme = createTheme({
             }
         }
      },
+     MuiTableCell: {
+        styleOverrides: {
+            root: {
+                borderBottom: `1px solid #333333`, // Subtle border as per design guide
+            },
+        },
+     },
   },
 });
 
