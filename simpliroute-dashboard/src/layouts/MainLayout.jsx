@@ -1,8 +1,9 @@
 import React from 'react';
 import { Outlet, NavLink } from 'react-router-dom';
-import { AppBar, Toolbar, Typography, Drawer, List, ListItemButton, ListItemIcon, ListItemText, Box, CssBaseline, IconButton, Paper } from '@mui/material';
+import { Toolbar, Typography, Drawer, List, ListItemButton, ListItemIcon, ListItemText, Box, CssBaseline, IconButton, Paper } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
-import { FaTachometerAlt, FaTruck, FaClock } from 'react-icons/fa'; // Example icons
+import { FaTachometerAlt, FaTruck, FaClock, FaSun, FaMoon } from 'react-icons/fa';
+import logo from '/src/assets/logo.png'; // Using absolute path verified with glob
 
 const drawerWidth = 240;
 
@@ -16,30 +17,17 @@ const DrawerStyled = styled(Drawer)({
   [`& .MuiDrawer-paper`]: {
     width: drawerWidth,
     boxSizing: 'border-box',
-    backgroundColor: '#1a1a1a', // Fondo Secundario/Alternativo for sidebar
+    backgroundColor: '#1a1a1a',
     borderRight: '1px solid #333333',
   },
 });
 
 const Content = styled(Box)({
   flexGrow: 1,
-  padding: (theme) => theme.spacing(3),
   display: 'flex',
   flexDirection: 'column',
   height: '100vh',
 });
-
-const Header = styled(Paper)(({ theme }) => ({
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
-    padding: theme.spacing(1, 2),
-    marginBottom: theme.spacing(3),
-    backgroundColor: theme.palette.background.paper, // Uses theme background for paper
-    border: `1px solid ${theme.palette.divider}`,
-}));
-
 
 const menuItems = [
   { text: 'Ruta Diaria', path: '/daily-route', icon: <FaTachometerAlt /> },
@@ -55,9 +43,7 @@ function MainLayout() {
       <CssBaseline />
       <DrawerStyled variant="permanent">
         <Toolbar sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Typography variant="h5" noWrap>
-                SimplyAYA
-            </Typography>
+            <Typography variant="h5" noWrap>SimplyAYA</Typography>
         </Toolbar>
         <Box sx={{ overflow: 'auto' }}>
           <List>
@@ -70,13 +56,9 @@ function MainLayout() {
                     '&.active': {
                         backgroundColor: theme.palette.primary.main,
                         color: theme.palette.primary.contrastText,
-                        '& .MuiListItemIcon-root': {
-                            color: theme.palette.primary.contrastText,
-                        },
+                        '& .MuiListItemIcon-root': { color: theme.palette.primary.contrastText },
                     },
-                    '&:hover': {
-                        backgroundColor: 'rgba(244, 0, 9, 0.1)',
-                    }
+                    '&:hover': { backgroundColor: 'rgba(244, 0, 9, 0.1)' }
                 }}
               >
                 <ListItemIcon sx={{ color: theme.palette.text.secondary }}>{item.icon}</ListItemIcon>
@@ -87,16 +69,28 @@ function MainLayout() {
         </Box>
       </DrawerStyled>
       <Content component="main">
-        {/* The new thin header inside the content area */}
-        <Header>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: 'center' }}>
-                Logo Empresa
-            </Typography>
-            {/* Placeholder for Theme Toggle Button */}
+        {/* Header using simple sx props for reliability */}
+        <Paper
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            position: 'relative',
+            paddingY: 1,
+            paddingX: 2,
+            marginBottom: 3,
+            backgroundColor: 'transparent', // FINAL: As requested
+            border: `2px solid ${theme.palette.divider}`,
+          }}
+        >
+            <Box sx={{ flexGrow: 1, textAlign: 'center' }}>
+                <img src={logo} alt="Logo Empresa" style={{ height: '40px' }} />
+            </Box>
             <IconButton sx={{ position: 'absolute', right: 16 }}>
-                {/* <FaSun /> or <FaMoon /> would go here */}
+                <FaSun />
             </IconButton>
-        </Header>
+        </Paper>
+
         <Box sx={{ flexGrow: 1, overflow: 'auto' }}>
             <Outlet />
         </Box>
