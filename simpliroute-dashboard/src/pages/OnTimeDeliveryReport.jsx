@@ -234,7 +234,7 @@ function OnTimeDeliveryReport() {
                 <TableCell>{detail.vehiclePlate}</TableCell>
                 <TableCell align="right">{detail.load}</TableCell>
                 <TableCell>
-                  {detail.googleMapsUrl ? <Link href={detail.googleMapsUrl} target="_blank">Abrir</Link> : 'N/A'}
+                  {detail.googleMapsUrl ? <Link href={detail.googleMapsUrl} target="_blank">Ver Mapa</Link> : 'N/A'}
                 </TableCell>
                 <TableCell align="right"><span style={{ color: STATUS_COLORS[detail.status], fontWeight: 'bold' }}>{detail.status}</span></TableCell>
                 <TableCell>{detail.checkout_time}</TableCell>

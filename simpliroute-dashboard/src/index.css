@@ -1,12 +1,30 @@
+:root {
+  --theme-primary: #F40009;
+  --theme-primary-dark: #c00007;
+  --theme-bg-default: #111111;
+  --theme-text-primary: #FFFFFF;
+}
+
+* {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
 html, body, #root {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow: auto; /* Permite scrollbars cuando el contenido excede el tamaño de la pantalla */
+  overflow: auto;
+  background-color: var(--theme-bg-default);
+  color: var(--theme-text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
-/* Opcional: Estilos para el texto de los enlaces para que no aparezcan subrayados */
 a {
   text-decoration: none;
-  color: inherit;
+  color: var(--theme-primary);
+}
+
+a:hover {
+  color: var(--theme-primary-dark);
 }
