@@ -110,7 +110,7 @@ function DailyRouteReport() {
   }));
 
   return (
-    <Box sx={{ p: 3 }}>
+    <Box sx={{ p: 2 }}>
       {/* Chart Section */}
       <Paper elevation={3} sx={{ p: 2, mb: 4 }}>
         <ResponsiveContainer width="100%" height={400}>

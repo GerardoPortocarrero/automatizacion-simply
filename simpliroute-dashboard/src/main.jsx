@@ -29,18 +29,46 @@ const theme = createTheme({
   },
   typography: {
     fontFamily: [
-      '-apple-system',
-      'BlinkMacSystemFont',
-      '"Segoe UI"',
       'Roboto',
-      '"Helvetica Neue"',
-      'Arial',
       'sans-serif',
     ].join(','),
+    fontWeightLight: 400, // All weights to 400
     fontWeightRegular: 400,
+    fontWeightMedium: 400,
+    fontWeightBold: 400,
     lineHeight: 1.5,
+    // Ensure all variants inherit base styles if not otherwise specified
+    h1: { fontWeight: 400, lineHeight: 1.5 },
+    h2: { fontWeight: 400, lineHeight: 1.5 },
+    h3: { fontWeight: 400, lineHeight: 1.5 },
+    h4: { fontWeight: 400, lineHeight: 1.5 },
+    h5: { fontWeight: 400, lineHeight: 1.5 },
+    h6: { fontWeight: 400, lineHeight: 1.5 },
+    subtitle1: { fontWeight: 400, lineHeight: 1.5 },
+    subtitle2: { fontWeight: 400, lineHeight: 1.5 },
+    body1: { fontWeight: 400, lineHeight: 1.5 },
+    body2: { fontWeight: 400, lineHeight: 1.5 },
+    button: { fontWeight: 400, lineHeight: 1.5, textTransform: 'none' }, // Also apply textTransform: 'none' as in button styleOverrides
+    caption: { fontWeight: 400, lineHeight: 1.5 },
+    overline: { fontWeight: 400, lineHeight: 1.5 },
   },
   components: {
+    MuiTypography: {
+        defaultProps: {
+            variantMapping: {
+                h1: 'h1', h2: 'h2', h3: 'h3', h4: 'h4', h5: 'h5', h6: 'h6',
+                subtitle1: 'p', subtitle2: 'p', body1: 'p', body2: 'p',
+                button: 'span', caption: 'span', overline: 'span',
+            },
+        },
+        styleOverrides: {
+            root: {
+                // Ensure typography elements do not have default margins
+                marginTop: 0,
+                marginBottom: 0,
+            },
+        },
+    },
     // Global override for sharp edges and no shadows
     MuiButton: {
       styleOverrides: {

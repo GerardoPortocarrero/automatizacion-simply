@@ -99,7 +99,7 @@ function MainLayout() {
             </IconButton>
         </Box>
 
-        <Box sx={{ flexGrow: 1, overflow: 'auto', padding: 3 }}>
+        <Box sx={{ flexGrow: 1, overflow: 'auto' }}>
             <Outlet />
         </Box>
       </Content>
