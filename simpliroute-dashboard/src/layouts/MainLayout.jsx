@@ -57,8 +57,18 @@ function MainLayout() {
                         backgroundColor: theme.palette.primary.main,
                         color: theme.palette.primary.contrastText,
                         '& .MuiListItemIcon-root': { color: theme.palette.primary.contrastText },
+                        // Ensure active state hover doesn't change color
+                        '&:hover': {
+                            backgroundColor: theme.palette.primary.main, // Keep active background on hover
+                            color: theme.palette.primary.contrastText, // Keep active text color on hover
+                            '& .MuiListItemIcon-root': { color: theme.palette.primary.contrastText }, // Keep active icon color on hover
+                        }
                     },
-                    '&:hover': { backgroundColor: 'rgba(244, 0, 9, 0.1)' }
+                    '&:hover': {
+                        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                        color: theme.palette.text.primary,
+                        '& .MuiListItemIcon-root': { color: theme.palette.text.primary },
+                    }
                 }}
               >
                 <ListItemIcon sx={{ color: theme.palette.text.secondary }}>{item.icon}</ListItemIcon>
