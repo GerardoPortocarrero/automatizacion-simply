@@ -15,6 +15,7 @@ function PODReport() {
         
         const visitsResponse = await api.get('/v1/routes/visits/');
         const allVisits = visitsResponse.data.results || visitsResponse.data || [];
+        console.log("Todas las visitas obtenidas:", allVisits); // Log para todas las visitas
 
         // Filtrar y procesar visitas con información de POD
         const processedPODs = allVisits
@@ -29,7 +30,8 @@ function PODReport() {
             signature_url: visit.signature ? visit.signature.url : null,
             notes: visit.notes || 'Sin notas',
           }));
-
+        
+        console.log("Visitas con POD procesadas:", processedPODs); // Log para las visitas filtradas
         setPodData(processedPODs);
 
       } catch (err) {

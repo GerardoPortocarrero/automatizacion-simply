@@ -50,9 +50,6 @@ function MainLayout() {
               { text: 'Ruta Diaria', path: '/daily-route' },
               { text: 'Rendimiento de Vehículos', path: '/vehicle-performance' },
               { text: 'Entregas a Tiempo', path: '/on-time-delivery' },
-              { text: 'Historial de Visitas por Cliente', path: '/client-visit-history' },
-              { text: 'Prueba de Entrega (POD)', path: '/pod-report' },
-              { text: 'Reporte Financiero', path: '/financial-report' },
             ].map((item) => (
               <ListItemButton key={item.text} component={Link} to={item.path}>
                 <ListItemText primary={item.text} />
