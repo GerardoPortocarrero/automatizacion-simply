@@ -143,10 +143,7 @@ function DailyRouteReport() {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>Reporte de Ruta Diaria</Typography>
-      
       {/* Chart Section */}
-      <Typography variant="h6" gutterBottom sx={{ mt: 4 }}>Comparativa de Rutas: Visitas vs. Distancia</Typography>
       <Paper elevation={3} sx={{ p: 2, mb: 4 }}>
         <ResponsiveContainer width="100%" height={400}>
           <BarChart
@@ -177,7 +174,6 @@ function DailyRouteReport() {
       </Paper>
 
       {/* Table Section */}
-      <Typography variant="h6" gutterBottom sx={{ mt: 4 }}>Detalle de Rutas</Typography>
       <TableContainer component={Paper} elevation={3}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>

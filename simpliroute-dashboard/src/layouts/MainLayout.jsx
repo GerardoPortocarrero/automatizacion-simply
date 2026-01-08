@@ -1,9 +1,9 @@
 import React from 'react';
 import { Outlet, NavLink } from 'react-router-dom';
-import { Toolbar, Typography, Drawer, List, ListItemButton, ListItemIcon, ListItemText, Box, CssBaseline, IconButton, Paper } from '@mui/material';
+import { Toolbar, Typography, Drawer, List, ListItemButton, ListItemIcon, ListItemText, Box, CssBaseline, IconButton } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
 import { FaTachometerAlt, FaTruck, FaClock, FaSun, FaMoon } from 'react-icons/fa';
-import logo from '/src/assets/logo.png'; // Using absolute path verified with glob
+import logo from '/src/assets/logo.png';
 
 const drawerWidth = 240;
 
@@ -11,16 +11,16 @@ const Root = styled(Box)({
   display: 'flex',
 });
 
-const DrawerStyled = styled(Drawer)({
+const DrawerStyled = styled(Drawer)(({ theme }) => ({
   width: drawerWidth,
   flexShrink: 0,
   [`& .MuiDrawer-paper`]: {
     width: drawerWidth,
     boxSizing: 'border-box',
-    backgroundColor: '#1a1a1a',
-    borderRight: '1px solid #333333',
+    backgroundColor: theme.palette.background.default,
+    borderRight: `1px solid ${theme.palette.divider}`,
   },
-});
+}));
 
 const Content = styled(Box)({
   flexGrow: 1,
@@ -69,8 +69,8 @@ function MainLayout() {
         </Box>
       </DrawerStyled>
       <Content component="main">
-        {/* Header using simple sx props for reliability */}
-        <Paper
+        {/* Header now uses a simple Box component as requested */}
+        <Box
           sx={{
             display: 'flex',
             alignItems: 'center',
@@ -78,9 +78,7 @@ function MainLayout() {
             position: 'relative',
             paddingY: 1,
             paddingX: 2,
-            marginBottom: 3,
-            backgroundColor: 'transparent', // FINAL: As requested
-            border: `2px solid ${theme.palette.divider}`,
+            borderBottom: `2px solid ${theme.palette.divider}`, // Separation with border
           }}
         >
             <Box sx={{ flexGrow: 1, textAlign: 'center' }}>
@@ -89,9 +87,9 @@ function MainLayout() {
             <IconButton sx={{ position: 'absolute', right: 16 }}>
                 <FaSun />
             </IconButton>
-        </Paper>
+        </Box>
 
-        <Box sx={{ flexGrow: 1, overflow: 'auto' }}>
+        <Box sx={{ flexGrow: 1, overflow: 'auto', padding: 3 }}>
             <Outlet />
         </Box>
       </Content>
