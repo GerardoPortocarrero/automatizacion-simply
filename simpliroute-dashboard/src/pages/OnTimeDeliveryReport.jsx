@@ -182,7 +182,7 @@ function OnTimeDeliveryReport() {
   ];
 
   return (
-    <Box sx={{ p: 3 }}>
+    <Box sx={{ p: 2 }}>
       {/* Summary Statistics */}
       <Paper elevation={3} sx={{ mb: 2, display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', backgroundColor: 'transparent', backgroundImage: 'none' }}>
         <Box textAlign="center" m={1}><Typography variant="h6">Total</Typography><Typography variant="h5">{reportData.totalVisits}</Typography></Box>
