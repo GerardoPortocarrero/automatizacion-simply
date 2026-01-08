@@ -169,8 +169,6 @@ function OnTimeDeliveryReport() {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>Reporte de Entregas</Typography>
-
       {/* Summary Statistics */}
       <Paper elevation={3} sx={{ p: 2, mb: 4, display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
         <Box textAlign="center" m={1}><Typography variant="h6">Total</Typography><Typography variant="h5">{reportData.totalVisits}</Typography></Box>
