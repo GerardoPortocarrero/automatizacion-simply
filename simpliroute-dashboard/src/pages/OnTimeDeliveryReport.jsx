@@ -25,6 +25,7 @@ import {
   Cell,
   Tooltip,
   Legend,
+  LabelList, // Import LabelList
 } from "recharts";
 import api from "../services/api";
 import { useFleet } from "../context/FleetContext";
@@ -143,11 +144,11 @@ function OnTimeDeliveryReport() {
     };
   }, [visits, driverMap, vehicleMap, fleetLoading]);
 
+  // Centered, text-less loading spinner
   if (loading || fleetLoading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="200px">
+      <Box display="flex" justifyContent="center" alignItems="center" sx={{ width: '100%', height: '100%' }}>
         <CircularProgress />
-        <Typography variant="h6" sx={{ ml: 2 }}>Cargando Datos del Reporte...</Typography>
       </Box>
     );
   }
@@ -168,6 +169,8 @@ function OnTimeDeliveryReport() {
 
   return (
     <Box sx={{ p: 3 }}>
+      <Typography variant="h4" gutterBottom>Reporte de Entregas</Typography>
+
       {/* Summary Statistics */}
       <Paper elevation={3} sx={{ p: 2, mb: 4, display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
         <Box textAlign="center" m={1}><Typography variant="h6">Total</Typography><Typography variant="h5">{reportData.totalVisits}</Typography></Box>
@@ -191,16 +194,7 @@ function OnTimeDeliveryReport() {
                 cy="50%" 
                 outerRadius={80} 
                 labelLine={false}
-                label={({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
-                  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-                  const x = cx + radius * Math.cos(-midAngle * (Math.PI / 180));
-                  const y = cy + radius * Math.sin(-midAngle * (Math.PI / 180));
-                  return (
-                    <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
-                      {`${(percent * 100).toFixed(0)}%`}
-                    </text>
-                  );
-                }}
+                label={({ name, value }) => `${value}`} // Show absolute value
               >
                 {pieChartData.map((entry) => <Cell key={entry.name} fill={STATUS_COLORS[entry.name]} />)}
               </Pie>
@@ -217,9 +211,15 @@ function OnTimeDeliveryReport() {
               <YAxis type="category" dataKey="driver" width={180} interval={0} />
               <Tooltip />
               <Legend verticalAlign="top" align="center" />
-              <Bar dataKey="Satisfactorio" stackId="a" fill={STATUS_COLORS['Satisfactorio']} />
-              <Bar dataKey="Pendiente" stackId="a" fill={STATUS_COLORS['Pendiente']} />
-              <Bar dataKey="Fallida" stackId="a" fill={STATUS_COLORS['Fallida']} />
+              <Bar dataKey="Satisfactorio" stackId="a" fill={STATUS_COLORS['Satisfactorio']}>
+                <LabelList dataKey="Satisfactorio" position="center" style={{ fill: 'white' }} />
+              </Bar>
+              <Bar dataKey="Pendiente" stackId="a" fill={STATUS_COLORS['Pendiente']}>
+                <LabelList dataKey="Pendiente" position="center" style={{ fill: 'black' }} />
+              </Bar>
+              <Bar dataKey="Fallida" stackId="a" fill={STATUS_COLORS['Fallida']}>
+                <LabelList dataKey="Fallida" position="center" style={{ fill: 'white' }} />
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
         </Paper>
@@ -249,7 +249,7 @@ function OnTimeDeliveryReport() {
                 <TableCell>{detail.vehiclePlate}</TableCell>
                 <TableCell align="right">{detail.load}</TableCell>
                 <TableCell>
-                  {detail.googleMapsUrl ? <Link href={detail.googleMapsUrl} target="_blank">Ver Mapa</Link> : 'N/A'}
+                  {detail.googleMapsUrl ? <Link href={detail.googleMapsUrl} target="_blank">Abrir</Link> : 'N/A'}
                 </TableCell>
                 <TableCell align="right"><span style={{ color: STATUS_COLORS[detail.status], fontWeight: 'bold' }}>{detail.status}</span></TableCell>
                 <TableCell>{detail.checkout_time}</TableCell>

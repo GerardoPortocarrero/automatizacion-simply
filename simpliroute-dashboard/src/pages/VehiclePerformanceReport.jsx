@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Typography, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import { useFleet } from '../context/FleetContext'; // Use the shared context
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LabelList } from 'recharts'; // Import LabelList
 import { useTheme } from '@mui/material/styles';
 
 function VehiclePerformanceReport() {
@@ -9,11 +9,11 @@ function VehiclePerformanceReport() {
   const { vehicles, loading: fleetLoading } = useFleet();
   const theme = useTheme();
 
+  // Centered, text-less loading spinner
   if (fleetLoading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="200px">
+      <Box display="flex" justifyContent="center" alignItems="center" sx={{ width: '100%', height: '100%' }}>
         <CircularProgress />
-        <Typography variant="h6" sx={{ ml: 2 }}>Cargando Reporte de Rendimiento de Vehículos...</Typography>
       </Box>
     );
   }
@@ -36,6 +36,8 @@ function VehiclePerformanceReport() {
 
   return (
     <Box sx={{ p: 3 }}>
+      <Typography variant="h4" gutterBottom>Reporte de Rendimiento de Vehículos</Typography>
+      
       {/* Chart Section */}
       <Paper elevation={3} sx={{ p: 2, mb: 4 }}>
         <Typography variant="h6" gutterBottom align="center">Capacidad por Vehículo</Typography>
@@ -60,8 +62,12 @@ function VehiclePerformanceReport() {
             <YAxis label={{ value: 'Unidades de Capacidad', angle: -90, position: 'insideLeft' }} />
             <Tooltip />
             <Legend verticalAlign="top" />
-            <Bar dataKey="Capacidad 1" fill={theme.palette.primary.main} />
-            <Bar dataKey="Capacidad 2" fill="#007bff" />
+            <Bar dataKey="Capacidad 1" fill={theme.palette.primary.main}>
+                <LabelList dataKey="Capacidad 1" position="top" style={{ fill: theme.palette.primary.main }} />
+            </Bar>
+            <Bar dataKey="Capacidad 2" fill="#007bff">
+                <LabelList dataKey="Capacidad 2" position="top" style={{ fill: '#007bff' }} />
+            </Bar>
           </BarChart>
         </ResponsiveContainer>
       </Paper>
