@@ -163,12 +163,12 @@ function DailyRouteReport() {
                 interval={0}
                 style={{ fontSize: '0.9rem' }}
             />
-            <YAxis yAxisId="left" orientation="left" stroke="#8884d8" label={{ value: 'Visitas', angle: -90, position: 'insideLeft' }} />
-            <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" label={{ value: 'Distancia (km)', angle: 90, position: 'insideRight' }} />
+            <YAxis yAxisId="left" orientation="left" stroke="#F40009" label={{ value: 'Visitas', angle: -90, position: 'insideLeft' }} />
+            <YAxis yAxisId="right" orientation="right" stroke="#007bff" label={{ value: 'Distancia (km)', angle: 90, position: 'insideRight' }} />
             <Tooltip />
             <Legend verticalAlign="top" />
-            <Bar yAxisId="left" dataKey="Visitas" fill="#8884d8" />
-            <Bar yAxisId="right" dataKey="Distancia (km)" fill="#82ca9d" />
+            <Bar yAxisId="left" dataKey="Visitas" fill="#F40009" />
+            <Bar yAxisId="right" dataKey="Distancia (km)" fill="#007bff" />
           </BarChart>
         </ResponsiveContainer>
       </Paper>
@@ -191,7 +191,12 @@ function DailyRouteReport() {
             {routes.map((route) => (
               <TableRow
                 key={route.id} // Mantener el key para React
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                sx={{ 
+                    '&:last-child td, &:last-child th': { border: 0 },
+                    '&:hover': {
+                        backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#1a1a1a' : '#e9ecef',
+                    }
+                }}
               >
                 <TableCell component="th" scope="row">
                   {route.vehicle_plate || 'N/A'}

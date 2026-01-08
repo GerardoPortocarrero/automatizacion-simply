@@ -182,11 +182,29 @@ function OnTimeDeliveryReport() {
           <Typography variant="h6" gutterBottom align="center">Distribución de Entregas</Typography>
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
-              <Pie data={pieChartData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={60} outerRadius={80} paddingAngle={5}>
+              <Legend verticalAlign="top" align="center" />
+              <Pie 
+                data={pieChartData} 
+                dataKey="value" 
+                nameKey="name" 
+                cx="50%" 
+                cy="50%" 
+                outerRadius={80} 
+                labelLine={false}
+                label={({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
+                  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+                  const x = cx + radius * Math.cos(-midAngle * (Math.PI / 180));
+                  const y = cy + radius * Math.sin(-midAngle * (Math.PI / 180));
+                  return (
+                    <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
+                      {`${(percent * 100).toFixed(0)}%`}
+                    </text>
+                  );
+                }}
+              >
                 {pieChartData.map((entry) => <Cell key={entry.name} fill={STATUS_COLORS[entry.name]} />)}
               </Pie>
               <Tooltip />
-              <Legend />
             </PieChart>
           </ResponsiveContainer>
         </Paper>
@@ -195,10 +213,10 @@ function OnTimeDeliveryReport() {
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={reportData.driverPerformance} layout="vertical" margin={{ right: 30, left: 50 }}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis type="number" />
+              <XAxis type="number" unit=" visitas" />
               <YAxis type="category" dataKey="driver" width={180} interval={0} />
               <Tooltip />
-              <Legend />
+              <Legend verticalAlign="top" align="center" />
               <Bar dataKey="Satisfactorio" stackId="a" fill={STATUS_COLORS['Satisfactorio']} />
               <Bar dataKey="Pendiente" stackId="a" fill={STATUS_COLORS['Pendiente']} />
               <Bar dataKey="Fallida" stackId="a" fill={STATUS_COLORS['Fallida']} />
