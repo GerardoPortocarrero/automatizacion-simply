@@ -170,7 +170,7 @@ function OnTimeDeliveryReport() {
   return (
     <Box sx={{ p: 2 }}>
       {/* Summary Statistics */}
-      <Paper elevation={3} sx={{ p: 2, mb: 4, display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
+      <Paper elevation={3} sx={{ mb: 2, display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
         <Box textAlign="center" m={1}><Typography variant="h6">Total</Typography><Typography variant="h5">{reportData.totalVisits}</Typography></Box>
         <Box textAlign="center" m={1}><Typography variant="h6">Satisfactorio</Typography><Typography variant="h5" sx={{ color: STATUS_COLORS['Satisfactorio'] }}>{reportData.satisfactoryVisits}</Typography></Box>
         <Box textAlign="center" m={1}><Typography variant="h6">Pendiente</Typography><Typography variant="h5" sx={{ color: STATUS_COLORS['Pendiente'] }}>{reportData.pendingVisits}</Typography></Box>
@@ -178,7 +178,7 @@ function OnTimeDeliveryReport() {
       </Paper>
       
       {/* Charts Section */}
-      <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} gap={4} mb={4}>
+      <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} gap={2} mb={2}>
         <Paper elevation={3} sx={{ p: 2, flex: 1 }}>
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
