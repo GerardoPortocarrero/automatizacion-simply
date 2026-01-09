@@ -1,16 +1,8 @@
-import React, { useEffect } from 'react';
 import { Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress } from '@mui/material';
 import { useFleet } from '../context/FleetContext';
 
 function DataPage() {
   const { drivers, vehicles, loading: fleetLoading } = useFleet();
-
-  useEffect(() => {
-    if (!fleetLoading) {
-      console.log("Datos de Conductores:", drivers);
-      console.log("Datos de Vehículos:", vehicles);
-    }
-  }, [drivers, vehicles, fleetLoading]);
 
   if (fleetLoading) {
     return (
