@@ -130,6 +130,7 @@ function OnTimeDeliveryReport() {
           : null,
         status: visitStatus,
         checkout_time: visit.checkout_time ? new Date(visit.checkout_time).toLocaleTimeString('es-ES') : 'N/A',
+        originalVisitId: visit.id, // Add original visit ID
       };
     });
 
@@ -170,8 +171,9 @@ function OnTimeDeliveryReport() {
     });
   }, [reportData, searchTerm, statusFilter]);
 
-  const handleRowClick = (record) => {
-    setSelectedRecord(record);
+  const handleRowClick = (detail) => { // receive detail from table row
+    const originalVisit = visits.find(visit => visit.id === detail.originalVisitId);
+    setSelectedRecord(originalVisit);
     setOpenModal(true);
   };
 
