@@ -215,9 +215,15 @@ function OnTimeDeliveryReport() {
         </Paper>
         <Paper elevation={3} sx={{ p: 2, flex: 2, backgroundColor: 'transparent', backgroundImage: 'none' }}>
           <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={reportData.driverPerformance} layout="vertical" margin={{ right: 30, left: 50 }}>
+            <BarChart data={reportData.driverPerformance} layout="vertical" margin={{ top: 40, right: 30, left: 50 }}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis type="number" unit=" visitas" axisLine={{ stroke: theme.palette.text.primary }} tick={{ fill: theme.palette.text.primary }} />
+              <XAxis 
+                type="number" 
+                unit=" visitas" 
+                axisLine={{ stroke: theme.palette.text.primary }} 
+                tick={{ fill: theme.palette.text.primary }} 
+                domain={[0, dataMax => Math.round(dataMax * 1.1)]}
+              />
               <YAxis type="category" dataKey="driver" width={180} interval={0} axisLine={{ stroke: theme.palette.text.primary }} tick={{ fill: theme.palette.text.primary }} />
               <Tooltip />
               <Legend verticalAlign="top" align="center" wrapperStyle={{ paddingBottom: '10px' }} />

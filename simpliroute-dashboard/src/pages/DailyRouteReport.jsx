@@ -143,8 +143,8 @@ function DailyRouteReport() {
                 style={{ fontSize: '0.9rem' }}
                 axisLine={{ stroke: theme.palette.text.primary }} tick={{ fill: theme.palette.text.primary }}
             />
-            <YAxis yAxisId="left" orientation="left" stroke="#F40009" axisLine={{ stroke: theme.palette.text.primary }} tick={{ fill: theme.palette.text.primary }} />
-            <YAxis yAxisId="right" orientation="right" stroke="#007bff" axisLine={{ stroke: theme.palette.text.primary }} tick={{ fill: theme.palette.text.primary }} />
+            <YAxis yAxisId="left" orientation="left" stroke="#F40009" axisLine={{ stroke: theme.palette.text.primary }} tick={{ fill: theme.palette.text.primary }} domain={[0, dataMax => Math.round(dataMax * 1.1)]} />
+            <YAxis yAxisId="right" orientation="right" stroke="#007bff" axisLine={{ stroke: theme.palette.text.primary }} tick={{ fill: theme.palette.text.primary }} domain={[0, dataMax => Math.round(dataMax * 1.1)]} />
             <Tooltip />
             <Legend verticalAlign="top" align="center" wrapperStyle={{ paddingBottom: '10px' }} />
             <Bar yAxisId="left" dataKey="Visitas" fill="#F40009">

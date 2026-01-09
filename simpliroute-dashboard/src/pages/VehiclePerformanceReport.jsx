@@ -51,7 +51,7 @@ function VehiclePerformanceReport() {
         <ResponsiveContainer width="100%" height={400}>
           <BarChart
             data={chartData}
-            margin={{ top: 20, right: 30, left: 20, bottom: 75 }}
+            margin={{ top: 40, right: 30, left: 20, bottom: 75 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis 
@@ -62,7 +62,11 @@ function VehiclePerformanceReport() {
                 style={{ fontSize: '0.9rem' }}
                 axisLine={{ stroke: theme.palette.text.primary }} tick={{ fill: theme.palette.text.primary }}
             />
-            <YAxis axisLine={{ stroke: theme.palette.text.primary }} tick={{ fill: theme.palette.text.primary }} />
+            <YAxis 
+                axisLine={{ stroke: theme.palette.text.primary }} 
+                tick={{ fill: theme.palette.text.primary }} 
+                domain={[0, dataMax => Math.round(dataMax * 1.1)]} 
+            />
             <Tooltip />
             <Legend verticalAlign="top" align="center" wrapperStyle={{ paddingBottom: '10px' }} />
             <Bar dataKey="Capacidad 1" fill={theme.palette.primary.main}>
