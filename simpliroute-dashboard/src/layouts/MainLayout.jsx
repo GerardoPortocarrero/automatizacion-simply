@@ -2,7 +2,7 @@ import React from 'react';
 import { Outlet, NavLink } from 'react-router-dom';
 import { Toolbar, Typography, Drawer, List, ListItemButton, ListItemIcon, ListItemText, Box, CssBaseline, IconButton } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
-import { FaTachometerAlt, FaTruck, FaClock, FaSun, FaMoon } from 'react-icons/fa';
+import { FaTachometerAlt, FaTruck, FaClock, FaSun, FaMoon, FaDatabase } from 'react-icons/fa';
 import logo from '/src/assets/logo.png';
 
 const drawerWidth = 240;
@@ -33,6 +33,7 @@ const menuItems = [
   { text: 'Reporte Ruta', path: '/daily-route', icon: <FaTachometerAlt /> },
   { text: 'Reporte Cliente', path: '/on-time-delivery', icon: <FaClock /> },
   { text: 'Capacidad Vehículos', path: '/vehicle-performance', icon: <FaTruck /> },
+  { text: 'Datos', path: '/data', icon: <FaDatabase /> },
 ];
 
 function MainLayout() {
