@@ -61,10 +61,10 @@ function VehiclePerformanceReport() {
   }
 
   return (
-    <Box sx={{ p: 2 }}>
+    <Box sx={{ p: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
       {/* Chart Section */}
-      <Paper elevation={3} sx={{ mb: 2, backgroundColor: 'transparent', backgroundImage: 'none' }}>
-        <ResponsiveContainer width="100%" height={400}>
+      <Paper elevation={3} sx={{ flex: '0 1 45%', backgroundColor: 'transparent', backgroundImage: 'none' }}>
+        <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={chartData}
             margin={{ top: 40, right: 30, left: 20, bottom: 75 }}
@@ -95,65 +95,69 @@ function VehiclePerformanceReport() {
         </ResponsiveContainer>
       </Paper>
 
-      {/* Filter and Search Section */}
-      <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-        <TextField
-            label="Buscar por Placa"
-            variant="outlined"
-            value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
-            sx={{ flexGrow: 1 }}
-        />
-        <FormControl sx={{ minWidth: 200 }}>
-            <InputLabel>Filtrar por Tipo de Carga</InputLabel>
-            <Select
-                value={typeFilter}
-                onChange={e => setTypeFilter(e.target.value)}
-                label="Filtrar por Tipo de Carga"
-            >
-                <MenuItem value="">Todos</MenuItem>
-                {uniqueTypes.map(type => (
-                    <MenuItem key={type} value={type}>{type}</MenuItem>
-                ))}
-            </Select>
-        </FormControl>
-      </Box>
-
       {/* Table Section */}
-      <TableContainer component={Paper} elevation={3} sx={{ backgroundColor: 'transparent', backgroundImage: 'none' }}>
-        <Table sx={{ minWidth: 650 }} aria-label="vehicle performance table">
-          <TableHead>
-            <TableRow>
-              <TableCell>N°</TableCell>
-              <TableCell>Placa</TableCell>
-              <TableCell align="right">Tipo de Carga</TableCell>
-              <TableCell align="right">Capacidad 1</TableCell>
-              <TableCell align="right">Capacidad 2</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredVehicles.map((vehicle, index) => (
-              <TableRow
-                key={vehicle.id}
-                sx={{
-                    '&:last-child td, &:last-child th': { border: 0 },
-                    cursor: 'pointer',
-                    '&:hover': {
-                        backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#1a1a1a' : '#e9ecef',
-                    }
-                }}
-                onClick={() => handleRowClick(vehicle)}
-              >
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>{vehicle.name || 'N/A'}</TableCell>
-                <TableCell align="right">{vehicle.type_load || 'N/A'}</TableCell>
-                <TableCell align="right">{vehicle.capacity || 'N/A'}</TableCell>
-                <TableCell align="right">{vehicle.capacity_2 || 'N/A'}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Box sx={{ flex: '1 1 55%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        {/* Filter and Search Section */}
+        <Box sx={{ display: 'flex', gap: 2, mb: 2, mt: 2, flexShrink: 0 }}>
+            <TextField
+                label="Buscar por Placa"
+                variant="outlined"
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
+                sx={{ flexGrow: 1 }}
+            />
+            <FormControl sx={{ minWidth: 200 }}>
+                <InputLabel>Filtrar por Tipo de Carga</InputLabel>
+                <Select
+                    value={typeFilter}
+                    onChange={e => setTypeFilter(e.target.value)}
+                    label="Filtrar por Tipo de Carga"
+                >
+                    <MenuItem value="">Todos</MenuItem>
+                    {uniqueTypes.map(type => (
+                        <MenuItem key={type} value={type}>{type}</MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
+        </Box>
+
+        <TableContainer component={Paper} elevation={3} sx={{ flexGrow: 1, overflow: 'auto', backgroundColor: 'transparent', backgroundImage: 'none' }}>
+            <Table sx={{ minWidth: 650 }} aria-label="vehicle performance table" stickyHeader>
+            <TableHead>
+                <TableRow>
+                <TableCell>N°</TableCell>
+                <TableCell>ID</TableCell>
+                <TableCell>Placa</TableCell>
+                <TableCell align="right">Tipo de Carga</TableCell>
+                <TableCell align="right">Capacidad 1</TableCell>
+                <TableCell align="right">Capacidad 2</TableCell>
+                </TableRow>
+            </TableHead>
+            <TableBody>
+                {filteredVehicles.map((vehicle, index) => (
+                <TableRow
+                    key={vehicle.id}
+                    sx={{
+                        '&:last-child td, &:last-child th': { border: 0 },
+                        cursor: 'pointer',
+                        '&:hover': {
+                            backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#1a1a1a' : '#e9ecef',
+                        }
+                    }}
+                    onClick={() => handleRowClick(vehicle)}
+                >
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell component="th" scope="row">{vehicle.id}</TableCell>
+                    <TableCell>{vehicle.name || 'N/A'}</TableCell>
+                    <TableCell align="right">{vehicle.type_load || 'N/A'}</TableCell>
+                    <TableCell align="right">{vehicle.capacity || 'N/A'}</TableCell>
+                    <TableCell align="right">{vehicle.capacity_2 || 'N/A'}</TableCell>
+                </TableRow>
+                ))}
+            </TableBody>
+            </Table>
+        </TableContainer>
+      </Box>
 
       <DetailsModal open={openModal} onClose={handleCloseModal} data={selectedRecord} />
     </Box>

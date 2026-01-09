@@ -205,9 +205,9 @@ function OnTimeDeliveryReport() {
   const uniqueStatuses = Object.keys(STATUS_COLORS);
 
   return (
-    <Box sx={{ p: 2 }}>
+    <Box sx={{ p: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
       {/* Summary Statistics */}
-      <Paper elevation={3} sx={{ mb: 2, display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', backgroundColor: 'transparent', backgroundImage: 'none' }}>
+      <Paper elevation={3} sx={{ mb: 2, display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', backgroundColor: 'transparent', backgroundImage: 'none', flexShrink: 0 }}>
         <Box textAlign="center" m={1}><Typography variant="h6">Total</Typography><Typography variant="h5">{reportData.totalVisits}</Typography></Box>
         <Box textAlign="center" m={1}><Typography variant="h6">Satisfactorio</Typography><Typography variant="h5" sx={{ color: STATUS_COLORS['Satisfactorio'] }}>{reportData.satisfactoryVisits}</Typography></Box>
         <Box textAlign="center" m={1}><Typography variant="h6">Pendiente</Typography><Typography variant="h5" sx={{ color: STATUS_COLORS['Pendiente'] }}>{reportData.pendingVisits}</Typography></Box>
@@ -215,9 +215,9 @@ function OnTimeDeliveryReport() {
       </Paper>
       
       {/* Charts Section */}
-      <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} gap={2} mb={2}>
+      <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} gap={2} mb={2} sx={{ flex: '0 1 40%' }}>
         <Paper elevation={3} sx={{ p: 2, flex: 1, backgroundColor: 'transparent', backgroundImage: 'none' }}>
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height="100%">
             <PieChart margin={{ top: 40 }}>
               <Legend verticalAlign="top" align="center" wrapperStyle={{ paddingBottom: '10px' }} />
               <Pie 
@@ -237,7 +237,7 @@ function OnTimeDeliveryReport() {
           </ResponsiveContainer>
         </Paper>
         <Paper elevation={3} sx={{ p: 2, flex: 2, backgroundColor: 'transparent', backgroundImage: 'none' }}>
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height="100%">
             <BarChart data={reportData.driverPerformance} layout="vertical" margin={{ top: 40, right: 30, left: 50 }}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis 
@@ -264,66 +264,67 @@ function OnTimeDeliveryReport() {
         </Paper>
       </Box>
 
-      {/* Filter and Search Section */}
-      <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-        <TextField
-            label="Buscar por Cliente, Dirección, Conductor o Vehículo"
-            variant="outlined"
-            value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
-            sx={{ flexGrow: 1 }}
-        />
-        <FormControl sx={{ minWidth: 200 }}>
-            <InputLabel>Filtrar por Estado</InputLabel>
-            <Select
-                value={statusFilter}
-                onChange={e => setStatusFilter(e.target.value)}
-                label="Filtrar por Estado"
-            >
-                <MenuItem value="">Todos</MenuItem>
-                {uniqueStatuses.map(status => (
-                    <MenuItem key={status} value={status}>{status}</MenuItem>
-                ))}
-            </Select>
-        </FormControl>
-      </Box>
-
       {/* Table Section */}
-      <TableContainer component={Paper} elevation={3} sx={{ backgroundColor: 'transparent', backgroundImage: 'none' }}>
-        <Table sx={{ minWidth: 650 }}>
-          <TableHead>
-            <TableRow>
-              <TableCell>N°</TableCell>
-              <TableCell>Cliente</TableCell>
-              <TableCell>Dirección</TableCell>
-              <TableCell>Conductor</TableCell>
-              <TableCell>Vehículo</TableCell>
-              <TableCell align="right">Carga</TableCell>
-              <TableCell>Ver en Mapa</TableCell>
-              <TableCell align="right">Estado</TableCell>
-              <TableCell>Hora Checkout</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredDetails.map((detail, index) => (
-              <TableRow key={detail.id} sx={{ '&:last-child td, &:last-child th': { border: 0 }, cursor: 'pointer' }} onClick={() => handleRowClick(detail)}>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>{detail.title}</TableCell>
-                <TableCell>{detail.address}</TableCell>
-                <TableCell>{detail.driverName}</TableCell>
-                <TableCell>{detail.vehiclePlate}</TableCell>
-                <TableCell align="right">{detail.load}</TableCell>
-                <TableCell>
-                  {detail.googleMapsUrl ? <Link href={detail.googleMapsUrl} target="_blank">Ver Mapa</Link> : 'N/A'}
-                </TableCell>
-                <TableCell align="right"><span style={{ color: STATUS_COLORS[detail.status], fontWeight: 'bold' }}>{detail.status}</span></TableCell>
-                <TableCell>{detail.checkout_time}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Box sx={{ flex: '1 1 50%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        {/* Filter and Search Section */}
+        <Box sx={{ display: 'flex', gap: 2, mb: 2, flexShrink: 0 }}>
+            <TextField
+                label="Buscar por Cliente, Dirección, Conductor o Vehículo"
+                variant="outlined"
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
+                sx={{ flexGrow: 1 }}
+            />
+            <FormControl sx={{ minWidth: 200 }}>
+                <InputLabel>Filtrar por Estado</InputLabel>
+                <Select
+                    value={statusFilter}
+                    onChange={e => setStatusFilter(e.target.value)}
+                    label="Filtrar por Estado"
+                >
+                    <MenuItem value="">Todos</MenuItem>
+                    {uniqueStatuses.map(status => (
+                        <MenuItem key={status} value={status}>{status}</MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
+        </Box>
 
+        <TableContainer component={Paper} elevation={3} sx={{ flexGrow: 1, overflow: 'auto', backgroundColor: 'transparent', backgroundImage: 'none' }}>
+            <Table sx={{ minWidth: 650 }} stickyHeader>
+            <TableHead>
+                <TableRow>
+                <TableCell>N°</TableCell>
+                <TableCell>Cliente</TableCell>
+                <TableCell>Dirección</TableCell>
+                <TableCell>Conductor</TableCell>
+                <TableCell>Vehículo</TableCell>
+                <TableCell align="right">Carga</TableCell>
+                <TableCell>Ver en Mapa</TableCell>
+                <TableCell align="right">Estado</TableCell>
+                <TableCell>Hora Checkout</TableCell>
+                </TableRow>
+            </TableHead>
+            <TableBody>
+                {filteredDetails.map((detail, index) => (
+                <TableRow key={detail.id} sx={{ '&:last-child td, &:last-child th': { border: 0 }, cursor: 'pointer' }} onClick={() => handleRowClick(detail)}>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{detail.title}</TableCell>
+                    <TableCell>{detail.address}</TableCell>
+                    <TableCell>{detail.driverName}</TableCell>
+                    <TableCell>{detail.vehiclePlate}</TableCell>
+                    <TableCell align="right">{detail.load}</TableCell>
+                    <TableCell>
+                    {detail.googleMapsUrl ? <Link href={detail.googleMapsUrl} target="_blank">Ver Mapa</Link> : 'N/A'}
+                    </TableCell>
+                    <TableCell align="right"><span style={{ color: STATUS_COLORS[detail.status], fontWeight: 'bold' }}>{detail.status}</span></TableCell>
+                    <TableCell>{detail.checkout_time}</TableCell>
+                </TableRow>
+                ))}
+            </TableBody>
+            </Table>
+        </TableContainer>
+      </Box>
       <DetailsModal open={openModal} onClose={handleCloseModal} data={selectedRecord} />
     </Box>
   );

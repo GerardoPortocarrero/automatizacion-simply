@@ -22,14 +22,7 @@ function DataPage() {
 
   return (
     <Box sx={{ p: 2 }}>
-      <Typography variant="h4" gutterBottom>
-        Datos Maestros
-      </Typography>
-
       {/* Drivers Table */}
-      <Typography variant="h5" gutterBottom sx={{ mt: 4 }}>
-        Conductores
-      </Typography>
       <TableContainer component={Paper} elevation={3} sx={{ backgroundColor: 'transparent', backgroundImage: 'none' }}>
         <Table sx={{ minWidth: 650 }} aria-label="drivers table">
           <TableHead>
@@ -56,10 +49,7 @@ function DataPage() {
       </TableContainer>
 
       {/* Vehicles Table */}
-      <Typography variant="h5" gutterBottom sx={{ mt: 4 }}>
-        Vehículos
-      </Typography>
-      <TableContainer component={Paper} elevation={3} sx={{ backgroundColor: 'transparent', backgroundImage: 'none' }}>
+      <TableContainer component={Paper} elevation={3} sx={{ backgroundColor: 'transparent', backgroundImage: 'none', mt: 2 }}>
         <Table sx={{ minWidth: 650 }} aria-label="vehicles table">
           <TableHead>
             <TableRow>

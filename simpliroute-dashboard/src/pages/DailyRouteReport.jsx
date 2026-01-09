@@ -143,10 +143,10 @@ function DailyRouteReport() {
   }
 
   return (
-    <Box sx={{ p: 2 }}>
+    <Box sx={{ p: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
       {/* Chart Section */}
-      <Paper elevation={3} sx={{ mb: 2, backgroundColor: 'transparent', backgroundImage: 'none' }}>
-        <ResponsiveContainer width="100%" height={400}>
+      <Paper elevation={3} sx={{ flex: '0 1 45%', backgroundColor: 'transparent', backgroundImage: 'none' }}>
+        <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={chartData}
             margin={{ top: 40, right: 30, left: 20, bottom: 75 }}
@@ -174,74 +174,75 @@ function DailyRouteReport() {
         </ResponsiveContainer>
       </Paper>
       
-      {/* Filter and Search Section */}
-      <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-        <TextField
-            label="Buscar por Vehículo o Conductor"
-            variant="outlined"
-            value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
-            sx={{ flexGrow: 1 }}
-        />
-        <FormControl sx={{ minWidth: 200 }}>
-            <InputLabel>Filtrar por Estado</InputLabel>
-            <Select
-                value={statusFilter}
-                onChange={e => setStatusFilter(e.target.value)}
-                label="Filtrar por Estado"
-            >
-                <MenuItem value="">Todos</MenuItem>
-                {uniqueStatuses.map(status => (
-                    <MenuItem key={status} value={status}>{status}</MenuItem>
-                ))}
-            </Select>
-        </FormControl>
-      </Box>
-
       {/* Table Section */}
-      <TableContainer component={Paper} elevation={3} sx={{ backgroundColor: 'transparent', backgroundImage: 'none' }}>
-        <Table sx={{ minWidth: 650 }}>
-          <TableHead>
-            <TableRow>
-              <TableCell>N°</TableCell>
-              <TableCell>Vehículo</TableCell>
-              <TableCell align="right">Conductor</TableCell>
-              <TableCell align="right">Estado</TableCell>
-              <TableCell align="right">Visitas</TableCell>
-              <TableCell align="right">Distancia (km)</TableCell>
-              <TableCell align="right">Duración Est.</TableCell>
-              <TableCell align="right">Hora Inicio Real</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredRoutes.map((route, index) => (
-              <TableRow
-                key={route.id}
-                sx={{ 
-                    '&:last-child td, &:last-child th': { border: 0 },
-                    cursor: 'pointer',
-                    '&:hover': {
-                        backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#1a1a1a' : '#e9ecef',
-                    }
-                }}
-                onClick={() => handleRowClick(route)}
-              >
-                <TableCell>{index + 1}</TableCell>
-                <TableCell component="th" scope="row">
-                  {route.vehicle_plate || 'N/A'}
-                </TableCell>
-                <TableCell align="right">{route.driver_name || 'N/A'}</TableCell>
-                <TableCell align="right">{route.status || 'N/A'}</TableCell>
-                <TableCell align="right">{route.total_visits || 0}</TableCell>
-                <TableCell align="right">{route.total_distance_km}</TableCell>
-                <TableCell align="right">{route.total_duration || 'N/A'}</TableCell>
-                <TableCell align="right">{route.real_start_time_formatted}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Box sx={{ flex: '1 1 55%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        {/* Filter and Search Section */}
+        <Box sx={{ display: 'flex', gap: 2, mb: 2, flexShrink: 0, mt: 2 }}>
+            <TextField
+                label="Buscar por Vehículo o Conductor"
+                variant="outlined"
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
+                sx={{ flexGrow: 1 }}
+            />
+            <FormControl sx={{ minWidth: 200 }}>
+                <InputLabel>Filtrar por Estado</InputLabel>
+                <Select
+                    value={statusFilter}
+                    onChange={e => setStatusFilter(e.target.value)}
+                    label="Filtrar por Estado"
+                >
+                    <MenuItem value="">Todos</MenuItem>
+                    {uniqueStatuses.map(status => (
+                        <MenuItem key={status} value={status}>{status}</MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
+        </Box>
 
+        <TableContainer component={Paper} elevation={3} sx={{ flexGrow: 1, overflow: 'auto', backgroundColor: 'transparent', backgroundImage: 'none' }}>
+            <Table sx={{ minWidth: 650 }} stickyHeader>
+            <TableHead>
+                <TableRow>
+                <TableCell>N°</TableCell>
+                <TableCell>Vehículo</TableCell>
+                <TableCell align="right">Conductor</TableCell>
+                <TableCell align="right">Estado</TableCell>
+                <TableCell align="right">Visitas</TableCell>
+                <TableCell align="right">Distancia (km)</TableCell>
+                <TableCell align="right">Duración Est.</TableCell>
+                <TableCell align="right">Hora Inicio Real</TableCell>
+                </TableRow>
+            </TableHead>
+            <TableBody>
+                {filteredRoutes.map((route, index) => (
+                <TableRow
+                    key={route.id}
+                    sx={{ 
+                        '&:last-child td, &:last-child th': { border: 0 },
+                        cursor: 'pointer',
+                        '&:hover': {
+                            backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#1a1a1a' : '#e9ecef',
+                        }
+                    }}
+                    onClick={() => handleRowClick(route)}
+                >
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell component="th" scope="row">
+                    {route.vehicle_plate || 'N/A'}
+                    </TableCell>
+                    <TableCell align="right">{route.driver_name || 'N/A'}</TableCell>
+                    <TableCell align="right">{route.status || 'N/A'}</TableCell>
+                    <TableCell align="right">{route.total_visits || 0}</TableCell>
+                    <TableCell align="right">{route.total_distance_km}</TableCell>
+                    <TableCell align="right">{route.total_duration || 'N/A'}</TableCell>
+                    <TableCell align="right">{route.real_start_time_formatted}</TableCell>
+                </TableRow>
+                ))}
+            </TableBody>
+            </Table>
+        </TableContainer>
+      </Box>
       <DetailsModal open={openModal} onClose={handleCloseModal} data={selectedRecord} />
     </Box>
   );
