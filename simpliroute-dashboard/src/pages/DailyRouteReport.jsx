@@ -149,7 +149,7 @@ function DailyRouteReport() {
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={chartData}
-            margin={{ top: 40, right: 30, left: 20, bottom: 75 }}
+            margin={{ top: 20, right: 20, left: 20, bottom: 75 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis 
