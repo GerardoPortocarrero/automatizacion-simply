@@ -1,18 +1,36 @@
-import React, { useState, useMemo } from 'react';
-import { Box, Typography, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import React, { useState, useMemo, useEffect } from 'react';
+import { Box, Typography, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, Alert } from '@mui/material';
 import { useFleet } from '../context/FleetContext';
+import api from '../services/api';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LabelList } from 'recharts';
 import { useTheme } from '@mui/material/styles';
 import DetailsModal from '../components/DetailsModal';
 
 function VehiclePerformanceReport() {
   const { vehicles, loading: fleetLoading } = useFleet();
+  const [visits, setVisits] = useState([]);
+  const [visitsLoading, setVisitsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const theme = useTheme();
 
   const [openModal, setOpenModal] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [typeFilter, setTypeFilter] = useState('');
+
+  useEffect(() => {
+    const fetchVisitsData = async () => {
+      try {
+        setVisitsLoading(true);
+        const response = await api.get('/v1/routes/visits/');
+        setVisits(response.data.results || response.data || []);
+      } catch (err) {
+        setError('Failed to load visit data.');
+      } finally {
+        setVisitsLoading(false);
+      }
+    };
+    fetchVisitsData();
+  }, []);
 
   const handleRowClick = (record) => {
     setSelectedRecord(record);
@@ -24,27 +42,42 @@ function VehiclePerformanceReport() {
     setSelectedRecord(null);
   };
 
-  const uniqueTypes = useMemo(() => [...new Set(vehicles.map(v => v.type_load).filter(Boolean))], [vehicles]);
+  const performanceData = useMemo(() => {
+    if (fleetLoading || visitsLoading) {
+      return [];
+    }
 
-  const filteredVehicles = useMemo(() => {
-    return vehicles.filter(vehicle => {
-      const searchTermLower = searchTerm.toLowerCase();
-      const plateMatch = vehicle.name.toLowerCase().includes(searchTermLower);
-      const typeMatch = typeFilter === '' || vehicle.type_load === typeFilter;
-      return plateMatch && typeMatch;
-    });
-  }, [vehicles, searchTerm, typeFilter]);
+    const load3ByVehicle = visits.reduce((acc, visit) => {
+      if (visit.vehicle && visit.load_3) {
+        acc[visit.vehicle] = (acc[visit.vehicle] || 0) + visit.load_3;
+      }
+      return acc;
+    }, {});
 
-  const chartData = useMemo(() => {
-    return filteredVehicles.map((vehicle) => ({
-      name: vehicle.name,
-      "Capacidad 1": vehicle.capacity,
-      "Capacidad 2": vehicle.capacity_2,
+    const loadByVehicle = visits.reduce((acc, visit) => {
+      if (visit.vehicle && visit.load) { 
+        acc[visit.vehicle] = (acc[visit.vehicle] || 0) + (visit.load/5.688);
+      }
+      return acc;
+    }, {});
+
+    return vehicles.map(vehicle => ({
+      ...vehicle,
+      name: vehicle.name || 'N/A',
+      Capacidad: vehicle.capacity || 0,
+      CF: parseFloat((load3ByVehicle[vehicle.id] || 0).toFixed(2)),
+      CU: parseFloat((loadByVehicle[vehicle.id] || 0).toFixed(2)),
     }));
-  }, [filteredVehicles]);
+  }, [vehicles, visits, fleetLoading, visitsLoading]);
+
+  const filteredPerformanceData = useMemo(() => {
+    return performanceData.filter(vehicle =>
+      vehicle.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [performanceData, searchTerm]);
 
 
-  if (fleetLoading) {
+  if (fleetLoading || visitsLoading) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" sx={{ width: '100%', height: '100%' }}>
         <CircularProgress />
@@ -52,10 +85,14 @@ function VehiclePerformanceReport() {
     );
   }
 
+  if (error) {
+    return <Alert severity="error">{error}</Alert>;
+  }
+
   if (vehicles.length === 0) {
     return (
-        <Box sx={{ p: 3 }}>
-            <Typography>No se encontraron vehículos.</Typography>
+      <Box sx={{ p: 3 }}>
+        <Typography>No se encontraron vehículos.</Typography>
       </Box>
     );
   }
@@ -66,7 +103,7 @@ function VehiclePerformanceReport() {
       <Paper elevation={3} sx={{ flex: '0 1 45%', backgroundColor: 'transparent', backgroundImage: 'none' }}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
-            data={chartData}
+            data={filteredPerformanceData}
             margin={{ top: 40, right: 30, left: 20, bottom: 75 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
@@ -78,18 +115,21 @@ function VehiclePerformanceReport() {
                 style={{ fontSize: '0.9rem' }}
                 axisLine={{ stroke: theme.palette.text.primary }} tick={{ fill: theme.palette.text.primary }}
             />
-            <YAxis 
+            <YAxis
                 axisLine={{ stroke: theme.palette.text.primary }} 
                 tick={{ fill: theme.palette.text.primary }} 
                 domain={[0, dataMax => Math.round(dataMax * 1.1)]} 
             />
             <Tooltip />
             <Legend verticalAlign="top" align="center" wrapperStyle={{ paddingBottom: '10px' }} />
-            <Bar dataKey="Capacidad 1" fill={theme.palette.primary.main}>
-                <LabelList dataKey="Capacidad 1" position="top" style={{ fill: theme.palette.primary.main }} formatter={(value) => value === 0 ? '' : value} />
+            <Bar dataKey="Capacidad" fill={theme.palette.primary.main}>
+                <LabelList dataKey="Capacidad" position="top" style={{ fill: theme.palette.primary.main }} formatter={(value) => value === 0 ? '' : value} />
             </Bar>
-            <Bar dataKey="Capacidad 2" fill="#007bff">
-                <LabelList dataKey="Capacidad 2" position="top" style={{ fill: '#007bff' }} formatter={(value) => value === 0 ? '' : value} />
+            <Bar dataKey="CF" fill="#28a745"> {/* Green for CF */}
+                <LabelList dataKey="CF" position="top" style={{ fill: '#28a745' }} formatter={(value) => value === 0 ? '' : value} />
+            </Bar>
+            <Bar dataKey="CU" fill="#ffc107"> {/* Orange for CU */}
+                <LabelList dataKey="CU" position="top" style={{ fill: '#ffc107' }} formatter={(value) => value === 0 ? '' : value} />
             </Bar>
           </BarChart>
         </ResponsiveContainer>
@@ -106,35 +146,20 @@ function VehiclePerformanceReport() {
                 onChange={e => setSearchTerm(e.target.value)}
                 sx={{ flexGrow: 1 }}
             />
-            <FormControl sx={{ minWidth: 200 }}>
-                <InputLabel>Filtrar por Tipo de Carga</InputLabel>
-                <Select
-                    value={typeFilter}
-                    onChange={e => setTypeFilter(e.target.value)}
-                    label="Filtrar por Tipo de Carga"
-                >
-                    <MenuItem value="">Todos</MenuItem>
-                    {uniqueTypes.map(type => (
-                        <MenuItem key={type} value={type}>{type}</MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
         </Box>
 
         <TableContainer component={Paper} elevation={3} sx={{ flexGrow: 1, overflow: 'auto', backgroundColor: 'transparent', backgroundImage: 'none' }}>
             <Table sx={{ minWidth: 650 }} aria-label="vehicle performance table" stickyHeader>
             <TableHead>
                 <TableRow>
-                <TableCell>N°</TableCell>
-                <TableCell>ID</TableCell>
                 <TableCell>Placa</TableCell>
-                <TableCell align="right">Tipo de Carga</TableCell>
-                <TableCell align="right">Capacidad 1</TableCell>
-                <TableCell align="right">Capacidad 2</TableCell>
+                <TableCell align="right">Capacidad</TableCell>
+                <TableCell align="right">CF</TableCell>
+                <TableCell align="right">CU</TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>
-                {filteredVehicles.map((vehicle, index) => (
+                {filteredPerformanceData.map((vehicle, index) => (
                 <TableRow
                     key={vehicle.id}
                     sx={{
@@ -146,12 +171,10 @@ function VehiclePerformanceReport() {
                     }}
                     onClick={() => handleRowClick(vehicle)}
                 >
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell component="th" scope="row">{vehicle.id}</TableCell>
-                    <TableCell>{vehicle.name || 'N/A'}</TableCell>
-                    <TableCell align="right">{vehicle.type_load || 'N/A'}</TableCell>
-                    <TableCell align="right">{vehicle.capacity || 'N/A'}</TableCell>
-                    <TableCell align="right">{vehicle.capacity_2 || 'N/A'}</TableCell>
+                    <TableCell component="th" scope="row">{vehicle.name}</TableCell>
+                    <TableCell align="right">{vehicle.Capacidad}</TableCell>
+                    <TableCell align="right">{vehicle.CF}</TableCell>
+                    <TableCell align="right">{vehicle.CU}</TableCell>
                 </TableRow>
                 ))}
             </TableBody>
