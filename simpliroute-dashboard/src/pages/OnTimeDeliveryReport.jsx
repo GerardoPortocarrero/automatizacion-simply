@@ -247,7 +247,7 @@ function OnTimeDeliveryReport() {
                 tick={{ fill: theme.palette.text.primary }} 
                 domain={[0, dataMax => Math.round(dataMax * 1.1)]}
               />
-              <YAxis type="category" dataKey="driver" width={160} interval={0} axisLine={{ stroke: theme.palette.text.primary }} tick={{ fill: theme.palette.text.primary }} />
+              <YAxis type="category" dataKey="driver" width={175} interval={0} axisLine={{ stroke: theme.palette.text.primary }} tick={{ fill: theme.palette.text.primary }} />
               <Tooltip />
               <Legend verticalAlign="top" align="center" wrapperStyle={{ paddingBottom: '10px' }} />
               <Bar dataKey="Satisfactorio" stackId="a" fill={STATUS_COLORS['Satisfactorio']}>
