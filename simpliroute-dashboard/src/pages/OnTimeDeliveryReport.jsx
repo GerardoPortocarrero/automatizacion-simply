@@ -216,7 +216,7 @@ function OnTimeDeliveryReport() {
       
       {/* Charts Section */}
       <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} gap={2} mb={2} sx={{ flex: '0 1 40%' }}>
-        <Paper elevation={3} sx={{ p: 2, flex: 1, backgroundColor: 'transparent', backgroundImage: 'none' }}>
+        <Paper elevation={3} sx={{ flex: 1, backgroundColor: 'transparent', backgroundImage: 'none' }}>
           <ResponsiveContainer width="100%" height="100%">
             <PieChart margin={{ top: 40 }}>
               <Legend verticalAlign="top" align="center" wrapperStyle={{ paddingBottom: '10px' }} />
@@ -236,7 +236,7 @@ function OnTimeDeliveryReport() {
             </PieChart>
           </ResponsiveContainer>
         </Paper>
-        <Paper elevation={3} sx={{ p: 2, flex: 2, backgroundColor: 'transparent', backgroundImage: 'none' }}>
+        <Paper elevation={3} sx={{ flex: 2, backgroundColor: 'transparent', backgroundImage: 'none' }}>
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={reportData.driverPerformance} layout="vertical" margin={{ top: 40, right: 30, left: 50 }}>
               <CartesianGrid strokeDasharray="3 3" />
