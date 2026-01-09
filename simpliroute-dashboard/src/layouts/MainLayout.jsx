@@ -30,9 +30,9 @@ const Content = styled(Box)({
 });
 
 const menuItems = [
-  { text: 'Reporte Ruta', path: '/daily-route', icon: <FaTachometerAlt /> },
-  { text: 'Reporte Cliente', path: '/on-time-delivery', icon: <FaClock /> },
-  { text: 'Capacidad Vehículos', path: '/vehicle-performance', icon: <FaTruck /> },
+  { text: 'Reporte Ruta', path: '/avance-por-ruta', icon: <FaTachometerAlt /> },
+  { text: 'Reporte Entregas', path: '/avance-por-cliente', icon: <FaClock /> },
+  { text: 'Reporte Capacidad', path: '/capacidad-por-camion', icon: <FaTruck /> },
   { text: 'Datos', path: '/data', icon: <FaDatabase /> },
 ];
 

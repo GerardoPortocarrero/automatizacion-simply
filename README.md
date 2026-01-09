@@ -30,6 +30,6 @@ Con los datos disponibles, es posible generar una variedad de reportes para el a
     - **Contenido:** Distancia total recorrida, número de visitas completadas, carga total transportada y consumo de combustible por vehículo.
     - **Fuentes de Datos:** `Vehicles`, `Routes`, `Visits`, `GPS Data`.
 
-3.  **Reporte Cliente a Tiempo (On-Time Delivery):**
+3.  **Reporte Entregas:**
     - **Contenido:** Porcentaje de visitas completadas dentro de la ventana horaria planificada, con posibilidad de agregación por conductor, ruta o cliente.
     - **Fuentes de Datos:** `Visits`, `Routes`.

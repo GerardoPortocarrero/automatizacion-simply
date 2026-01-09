@@ -11,9 +11,9 @@ function App() {
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<DailyRouteReport />} /> {/* Default page */}
-          <Route path="daily-route" element={<DailyRouteReport />} />
-          <Route path="vehicle-performance" element={<VehiclePerformanceReport />} />
-          <Route path="on-time-delivery" element={<OnTimeDeliveryReport />} />
+          <Route path="avance-por-ruta" element={<DailyRouteReport />} />
+          <Route path="avance-por-cliente" element={<OnTimeDeliveryReport />} />
+          <Route path="capacidad-por-camion" element={<VehiclePerformanceReport />} />          
           <Route path="data" element={<DataPage />} />
         </Route>
       </Routes>
