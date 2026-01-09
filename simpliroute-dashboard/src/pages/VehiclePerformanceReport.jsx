@@ -123,7 +123,7 @@ function VehiclePerformanceReport() {
       <Box sx={{ flex: '0 1 45%', display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 2 }}>
         <Paper elevation={3} sx={{ flex: '0 1 30%', backgroundColor: 'transparent', backgroundImage: 'none' }}>
           <ResponsiveContainer width="100%" height="100%">
-            <PieChart margin={{ top: 20 }}>
+            <PieChart margin={{ top: 0 }}>
               <Legend verticalAlign="top" align="center" wrapperStyle={{ paddingBottom: '10px' }} />
               <Pie
                 data={pieChartData}
@@ -131,9 +131,10 @@ function VehiclePerformanceReport() {
                 nameKey="name"
                 cx="50%"
                 cy="50%"
-                outerRadius={80}
-                labelLine={false}
+                outerRadius={140}
                 label={({ percent }) => percent > 0 ? `${(percent * 100).toFixed(0)}%` : ''}
+                position="inside"
+                fill="white"
               >
                 {pieChartData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />
