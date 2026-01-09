@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Typography, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import React, { useEffect, useState, useMemo } from 'react';
+import { Box, Typography, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, Select, MenuItem, FormControl, InputLabel, Alert } from '@mui/material';
 import api from '../services/api';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LabelList } from 'recharts';
 import DetailsModal from '../components/DetailsModal';
@@ -11,6 +11,8 @@ function DailyRouteReport() {
   const [error, setError] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
 
   const theme = useTheme(); // Use theme here
 
@@ -98,6 +100,27 @@ function DailyRouteReport() {
     setOpenModal(false);
     setSelectedRecord(null); // Clear selected record on close
   };
+  
+  const uniqueStatuses = useMemo(() => [...new Set(routes.map(route => route.status))], [routes]);
+
+  const filteredRoutes = useMemo(() => {
+    return routes.filter(route => {
+        const searchTermLower = searchTerm.toLowerCase();
+        const vehicleMatch = route.vehicle_plate.toLowerCase().includes(searchTermLower);
+        const driverMatch = route.driver_name.toLowerCase().includes(searchTermLower);
+        const statusMatch = statusFilter === '' || route.status === statusFilter;
+        return (vehicleMatch || driverMatch) && statusMatch;
+    });
+  }, [routes, searchTerm, statusFilter]);
+
+  const chartData = useMemo(() => {
+    return filteredRoutes.map((route) => ({
+      name: route.vehicle_plate,
+      "Visitas": route.total_visits,
+      "Distancia (km)": parseFloat(route.total_distance_km),
+    }));
+  }, [filteredRoutes]);
+
 
   if (loading) {
     return (
@@ -119,12 +142,6 @@ function DailyRouteReport() {
     );
   }
 
-  const chartData = routes.map((route) => ({
-    name: route.vehicle_plate,
-    "Visitas": route.total_visits,
-    "Distancia (km)": parseFloat(route.total_distance_km),
-  }));
-
   return (
     <Box sx={{ p: 2 }}>
       {/* Chart Section */}
@@ -132,7 +149,7 @@ function DailyRouteReport() {
         <ResponsiveContainer width="100%" height={400}>
           <BarChart
             data={chartData}
-            margin={{ top: 20, right: 30, left: 20, bottom: 75 }}
+            margin={{ top: 40, right: 30, left: 20, bottom: 75 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis 
@@ -156,6 +173,30 @@ function DailyRouteReport() {
           </BarChart>
         </ResponsiveContainer>
       </Paper>
+      
+      {/* Filter and Search Section */}
+      <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+        <TextField
+            label="Buscar por Vehículo o Conductor"
+            variant="outlined"
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+            sx={{ flexGrow: 1 }}
+        />
+        <FormControl sx={{ minWidth: 200 }}>
+            <InputLabel>Filtrar por Estado</InputLabel>
+            <Select
+                value={statusFilter}
+                onChange={e => setStatusFilter(e.target.value)}
+                label="Filtrar por Estado"
+            >
+                <MenuItem value="">Todos</MenuItem>
+                {uniqueStatuses.map(status => (
+                    <MenuItem key={status} value={status}>{status}</MenuItem>
+                ))}
+            </Select>
+        </FormControl>
+      </Box>
 
       {/* Table Section */}
       <TableContainer component={Paper} elevation={3} sx={{ backgroundColor: 'transparent', backgroundImage: 'none' }}>
@@ -173,7 +214,7 @@ function DailyRouteReport() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {routes.map((route, index) => (
+            {filteredRoutes.map((route, index) => (
               <TableRow
                 key={route.id}
                 sx={{ 

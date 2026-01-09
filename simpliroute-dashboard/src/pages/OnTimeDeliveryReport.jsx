@@ -12,6 +12,11 @@ import {
   TableHead,
   TableRow,
   Typography,
+  TextField,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import {
   BarChart,
@@ -45,6 +50,8 @@ function OnTimeDeliveryReport() {
   const [visits, setVisits] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
 
   const theme = useTheme(); // Use theme here
 
@@ -149,6 +156,20 @@ function OnTimeDeliveryReport() {
     };
   }, [visits, driverMap, vehicleMap, fleetLoading]);
 
+  const filteredDetails = useMemo(() => {
+    if (!reportData) return [];
+    return reportData.details.filter(detail => {
+      const searchTermLower = searchTerm.toLowerCase();
+      const clientMatch = detail.title.toLowerCase().includes(searchTermLower);
+      const addressMatch = detail.address.toLowerCase().includes(searchTermLower);
+      const driverMatch = detail.driverName.toLowerCase().includes(searchTermLower);
+      const vehicleMatch = detail.vehiclePlate.toLowerCase().includes(searchTermLower);
+      const statusMatch = statusFilter === '' || detail.status === statusFilter;
+      
+      return (clientMatch || addressMatch || driverMatch || vehicleMatch) && statusMatch;
+    });
+  }, [reportData, searchTerm, statusFilter]);
+
   const handleRowClick = (record) => {
     setSelectedRecord(record);
     setOpenModal(true);
@@ -180,6 +201,8 @@ function OnTimeDeliveryReport() {
     { name: 'Pendiente', value: reportData.pendingVisits },
     { name: 'Fallida', value: reportData.failedVisits },
   ];
+  
+  const uniqueStatuses = Object.keys(STATUS_COLORS);
 
   return (
     <Box sx={{ p: 2 }}>
@@ -195,7 +218,7 @@ function OnTimeDeliveryReport() {
       <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} gap={2} mb={2}>
         <Paper elevation={3} sx={{ p: 2, flex: 1, backgroundColor: 'transparent', backgroundImage: 'none' }}>
           <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
+            <PieChart margin={{ top: 40 }}>
               <Legend verticalAlign="top" align="center" wrapperStyle={{ paddingBottom: '10px' }} />
               <Pie 
                 data={pieChartData} 
@@ -241,6 +264,30 @@ function OnTimeDeliveryReport() {
         </Paper>
       </Box>
 
+      {/* Filter and Search Section */}
+      <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+        <TextField
+            label="Buscar por Cliente, Dirección, Conductor o Vehículo"
+            variant="outlined"
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+            sx={{ flexGrow: 1 }}
+        />
+        <FormControl sx={{ minWidth: 200 }}>
+            <InputLabel>Filtrar por Estado</InputLabel>
+            <Select
+                value={statusFilter}
+                onChange={e => setStatusFilter(e.target.value)}
+                label="Filtrar por Estado"
+            >
+                <MenuItem value="">Todos</MenuItem>
+                {uniqueStatuses.map(status => (
+                    <MenuItem key={status} value={status}>{status}</MenuItem>
+                ))}
+            </Select>
+        </FormControl>
+      </Box>
+
       {/* Table Section */}
       <TableContainer component={Paper} elevation={3} sx={{ backgroundColor: 'transparent', backgroundImage: 'none' }}>
         <Table sx={{ minWidth: 650 }}>
@@ -258,7 +305,7 @@ function OnTimeDeliveryReport() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {reportData.details.map((detail, index) => (
+            {filteredDetails.map((detail, index) => (
               <TableRow key={detail.id} sx={{ '&:last-child td, &:last-child th': { border: 0 }, cursor: 'pointer' }} onClick={() => handleRowClick(detail)}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{detail.title}</TableCell>

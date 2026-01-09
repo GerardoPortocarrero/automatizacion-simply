@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Box, Typography, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import React, { useState, useMemo } from 'react';
+import { Box, Typography, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { useFleet } from '../context/FleetContext';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LabelList } from 'recharts';
 import { useTheme } from '@mui/material/styles';
@@ -11,6 +11,8 @@ function VehiclePerformanceReport() {
 
   const [openModal, setOpenModal] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [typeFilter, setTypeFilter] = useState('');
 
   const handleRowClick = (record) => {
     setSelectedRecord(record);
@@ -21,6 +23,26 @@ function VehiclePerformanceReport() {
     setOpenModal(false);
     setSelectedRecord(null);
   };
+
+  const uniqueTypes = useMemo(() => [...new Set(vehicles.map(v => v.type_load).filter(Boolean))], [vehicles]);
+
+  const filteredVehicles = useMemo(() => {
+    return vehicles.filter(vehicle => {
+      const searchTermLower = searchTerm.toLowerCase();
+      const plateMatch = vehicle.name.toLowerCase().includes(searchTermLower);
+      const typeMatch = typeFilter === '' || vehicle.type_load === typeFilter;
+      return plateMatch && typeMatch;
+    });
+  }, [vehicles, searchTerm, typeFilter]);
+
+  const chartData = useMemo(() => {
+    return filteredVehicles.map((vehicle) => ({
+      name: vehicle.name,
+      "Capacidad 1": vehicle.capacity,
+      "Capacidad 2": vehicle.capacity_2,
+    }));
+  }, [filteredVehicles]);
+
 
   if (fleetLoading) {
     return (
@@ -37,12 +59,6 @@ function VehiclePerformanceReport() {
       </Box>
     );
   }
-
-  const chartData = vehicles.map((vehicle) => ({
-    name: vehicle.name,
-    "Capacidad 1": vehicle.capacity,
-    "Capacidad 2": vehicle.capacity_2,
-  }));
 
   return (
     <Box sx={{ p: 2 }}>
@@ -79,13 +95,36 @@ function VehiclePerformanceReport() {
         </ResponsiveContainer>
       </Paper>
 
+      {/* Filter and Search Section */}
+      <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+        <TextField
+            label="Buscar por Placa"
+            variant="outlined"
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+            sx={{ flexGrow: 1 }}
+        />
+        <FormControl sx={{ minWidth: 200 }}>
+            <InputLabel>Filtrar por Tipo de Carga</InputLabel>
+            <Select
+                value={typeFilter}
+                onChange={e => setTypeFilter(e.target.value)}
+                label="Filtrar por Tipo de Carga"
+            >
+                <MenuItem value="">Todos</MenuItem>
+                {uniqueTypes.map(type => (
+                    <MenuItem key={type} value={type}>{type}</MenuItem>
+                ))}
+            </Select>
+        </FormControl>
+      </Box>
+
       {/* Table Section */}
       <TableContainer component={Paper} elevation={3} sx={{ backgroundColor: 'transparent', backgroundImage: 'none' }}>
         <Table sx={{ minWidth: 650 }} aria-label="vehicle performance table">
           <TableHead>
             <TableRow>
               <TableCell>N°</TableCell>
-              <TableCell>ID</TableCell>
               <TableCell>Placa</TableCell>
               <TableCell align="right">Tipo de Carga</TableCell>
               <TableCell align="right">Capacidad 1</TableCell>
@@ -93,7 +132,7 @@ function VehiclePerformanceReport() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {vehicles.map((vehicle, index) => (
+            {filteredVehicles.map((vehicle, index) => (
               <TableRow
                 key={vehicle.id}
                 sx={{
@@ -106,7 +145,6 @@ function VehiclePerformanceReport() {
                 onClick={() => handleRowClick(vehicle)}
               >
                 <TableCell>{index + 1}</TableCell>
-                <TableCell component="th" scope="row">{vehicle.id}</TableCell>
                 <TableCell>{vehicle.name || 'N/A'}</TableCell>
                 <TableCell align="right">{vehicle.type_load || 'N/A'}</TableCell>
                 <TableCell align="right">{vehicle.capacity || 'N/A'}</TableCell>
