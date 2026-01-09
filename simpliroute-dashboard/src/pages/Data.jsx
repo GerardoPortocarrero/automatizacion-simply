@@ -21,10 +21,10 @@ function DataPage() {
   }
 
   return (
-    <Box sx={{ p: 2 }}>
+    <Box sx={{ p: 2, height: '100%', display: 'flex', flexDirection: 'column', gap: 2 }}>
       {/* Drivers Table */}
-      <TableContainer component={Paper} elevation={3} sx={{ backgroundColor: 'transparent', backgroundImage: 'none' }}>
-        <Table sx={{ minWidth: 650 }} aria-label="drivers table">
+      <TableContainer component={Paper} elevation={3} sx={{ flex: '1 1 50%', overflow: 'auto', backgroundColor: 'transparent', backgroundImage: 'none' }}>
+        <Table sx={{ minWidth: 650 }} aria-label="drivers table" stickyHeader>
           <TableHead>
             <TableRow>
               <TableCell>Nombre</TableCell>
@@ -49,8 +49,8 @@ function DataPage() {
       </TableContainer>
 
       {/* Vehicles Table */}
-      <TableContainer component={Paper} elevation={3} sx={{ backgroundColor: 'transparent', backgroundImage: 'none', mt: 2 }}>
-        <Table sx={{ minWidth: 650 }} aria-label="vehicles table">
+      <TableContainer component={Paper} elevation={3} sx={{ flex: '1 1 50%', overflow: 'auto', backgroundColor: 'transparent', backgroundImage: 'none' }}>
+        <Table sx={{ minWidth: 650 }} aria-label="vehicles table" stickyHeader>
           <TableHead>
             <TableRow>
               <TableCell>Nombre</TableCell>
