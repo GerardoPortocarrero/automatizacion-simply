@@ -3,11 +3,31 @@
   --theme-primary-dark: #c00007;
   --theme-bg-default: #111111;
   --theme-text-primary: #FFFFFF;
+  --theme-background-alt: #1a1a1a;
+  --theme-scrollbar-thumb: var(--theme-primary);
+  --theme-scrollbar-track: var(--theme-background-alt);
 }
 
 * {
   border-radius: 0 !important;
   box-shadow: none !important;
+  scrollbar-width: thin;
+  scrollbar-color: var(--theme-scrollbar-thumb) var(--theme-scrollbar-track);
+}
+
+/* Custom Scrollbar for Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--theme-scrollbar-track);
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--theme-scrollbar-thumb);
+  border-radius: 4px;
+  border: 2px solid var(--theme-scrollbar-track);
 }
 
 html, body, #root {
