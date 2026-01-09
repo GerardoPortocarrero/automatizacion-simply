@@ -31,7 +31,7 @@ function DetailsModal({ open, onClose, data }) {
           Detalles del Registro
         </Typography>
       </DialogTitle>
-      <DialogContent sx={{ paddingY: 2, paddingX: 3 }}>
+      <DialogContent sx={{ paddingY: 2, paddingX: 3, backgroundColor: theme.palette.background.default }}>
         {data ? (
           <Box sx={{ overflowX: 'auto', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
             <pre style={{ margin: 0, color: theme.palette.text.primary }}>
