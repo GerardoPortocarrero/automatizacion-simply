@@ -123,7 +123,7 @@ function VehiclePerformanceReport() {
       <Box sx={{ flex: '0 1 45%', display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 2 }}>
         <Paper elevation={3} sx={{ flex: '0 1 30%', backgroundColor: 'transparent', backgroundImage: 'none' }}>
           <ResponsiveContainer width="100%" height="100%">
-            <PieChart margin={{ top: 40 }}>
+            <PieChart margin={{ top: 20 }}>
               <Legend verticalAlign="top" align="center" wrapperStyle={{ paddingBottom: '10px' }} />
               <Pie
                 data={pieChartData}
@@ -147,7 +147,7 @@ function VehiclePerformanceReport() {
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={filteredPerformanceData}
-              margin={{ top: 40, right: 30, left: 20, bottom: 75 }}
+              margin={{ top: 20, right: 20, left: 20, bottom: 75 }}
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis 

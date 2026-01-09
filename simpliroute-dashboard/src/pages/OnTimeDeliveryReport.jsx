@@ -216,9 +216,9 @@ function OnTimeDeliveryReport() {
       
       {/* Charts Section */}
       <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} gap={2} mb={2} sx={{ flex: '0 1 40%' }}>
-        <Paper elevation={3} sx={{ flex: 1, backgroundColor: 'transparent', backgroundImage: 'none' }}>
+        <Paper elevation={3} sx={{ flex: '0 1 30%', backgroundColor: 'transparent', backgroundImage: 'none' }}>
           <ResponsiveContainer width="100%" height="100%">
-            <PieChart margin={{ top: 40 }}>
+            <PieChart margin={{ top: 20 }}>
               <Legend verticalAlign="top" align="center" wrapperStyle={{ paddingBottom: '10px' }} />
               <Pie 
                 data={pieChartData} 
@@ -236,9 +236,9 @@ function OnTimeDeliveryReport() {
             </PieChart>
           </ResponsiveContainer>
         </Paper>
-        <Paper elevation={3} sx={{ flex: 2, backgroundColor: 'transparent', backgroundImage: 'none' }}>
+        <Paper elevation={3} sx={{ flex: '0 1 70%', backgroundColor: 'transparent', backgroundImage: 'none' }}>
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={reportData.driverPerformance} layout="vertical" margin={{ top: 40, right: 30, left: 50 }}>
+            <BarChart data={reportData.driverPerformance} layout="vertical" margin={{ top: 20, right: 20, left: 50 }}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis 
                 type="number" 
@@ -247,7 +247,7 @@ function OnTimeDeliveryReport() {
                 tick={{ fill: theme.palette.text.primary }} 
                 domain={[0, dataMax => Math.round(dataMax * 1.1)]}
               />
-              <YAxis type="category" dataKey="driver" interval={0} axisLine={{ stroke: theme.palette.text.primary }} tick={{ fill: theme.palette.text.primary }} />
+              <YAxis type="category" dataKey="driver" width={160} interval={0} axisLine={{ stroke: theme.palette.text.primary }} tick={{ fill: theme.palette.text.primary }} />
               <Tooltip />
               <Legend verticalAlign="top" align="center" wrapperStyle={{ paddingBottom: '10px' }} />
               <Bar dataKey="Satisfactorio" stackId="a" fill={STATUS_COLORS['Satisfactorio']}>
